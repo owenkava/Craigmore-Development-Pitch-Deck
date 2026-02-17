@@ -27,19 +27,13 @@ export default function ClosingSection({ onNavigate }: ClosingSectionProps) {
           <span className="block text-caption font-mono uppercase tracking-widest text-white/40 mb-4">
             Investment Opportunity
           </span>
-          <h2 className="text-display-lg font-display font-bold tracking-tight text-white mb-4">
+          <h2 className="text-display-lg font-display font-bold tracking-tight text-white mb-6">
             Let&apos;s Build Together
           </h2>
-          <p className="text-body-lg text-white/60 max-w-2xl">
-            Citra Capital is raising{" "}
-            <span className="text-white font-semibold">{active.capitalAsk}</span>{" "}
-            in equity to acquire and develop Craigmore Drive —{" "}
-            <span className="text-white/80">{active.label}</span>.
-          </p>
         </motion.div>
 
         {/* ── Scenario Toggle ── */}
-        <div className="flex items-center gap-1 mt-8 mb-10 bg-white/10 rounded-full p-1 w-fit max-w-full overflow-x-auto">
+        <div className="flex items-center gap-1 mb-6 bg-white/10 rounded-full p-1 w-fit max-w-full overflow-x-auto">
           {closingScenarios.map((scenario, i) => (
             <button
               key={scenario.key}
@@ -61,6 +55,13 @@ export default function ClosingSection({ onNavigate }: ClosingSectionProps) {
             </button>
           ))}
         </div>
+
+        <p className="text-body-lg text-white/60 max-w-2xl mb-10">
+          Citra Capital is raising{" "}
+          <span className="text-white font-semibold">{active.capitalAsk}</span>{" "}
+          in equity to acquire and develop Craigmore Drive —{" "}
+          <span className="text-white/80">{active.label}</span>.
+        </p>
 
         {/* ── Scenario Content ── */}
         <AnimatePresence mode="wait">
