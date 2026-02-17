@@ -25,14 +25,15 @@ export default function MobileNav({
   };
 
   return (
-    <div className="lg:hidden no-print">
+    <nav className="lg:hidden no-print" role="navigation" aria-label="Mobile navigation">
       {/* Toggle button */}
       <button
         onClick={() => setOpen(!open)}
         className="fixed top-3 left-4 z-50 w-10 h-10 bg-white/95 backdrop-blur-sm border border-ink/10 rounded-lg flex items-center justify-center"
-        aria-label="Toggle navigation"
+        aria-label={open ? "Close navigation" : "Open navigation"}
+        aria-expanded={open}
       >
-        <motion.div animate={open ? "open" : "closed"} className="space-y-1.5">
+        <motion.div animate={open ? "open" : "closed"} className="space-y-1.5" aria-hidden="true">
           <motion.div
             className="w-5 h-0.5 bg-ink rounded"
             variants={{
@@ -113,6 +114,6 @@ export default function MobileNav({
           </>
         )}
       </AnimatePresence>
-    </div>
+    </nav>
   );
 }

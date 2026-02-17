@@ -28,7 +28,7 @@ export default function HomeCard({ home, dark = false }: HomeCardProps) {
       </div>
 
       {/* Images */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className={`grid grid-cols-1 ${home.floorPlanImage ? "md:grid-cols-2" : ""} gap-6`}>
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -37,22 +37,24 @@ export default function HomeCard({ home, dark = false }: HomeCardProps) {
         >
           <ImagePlaceholder
             label="Exterior Render"
-            aspect="16/10"
+            aspect={home.floorPlanImage ? "16/10" : "21/9"}
             src={home.exteriorImage}
           />
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          <ImagePlaceholder
-            label="Floor Plan"
-            aspect="16/10"
-            src={home.floorPlanImage}
-          />
-        </motion.div>
+        {home.floorPlanImage && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <ImagePlaceholder
+              label="Floor Plan"
+              aspect="16/10"
+              src={home.floorPlanImage}
+            />
+          </motion.div>
+        )}
       </div>
 
       {/* Specs + Details */}

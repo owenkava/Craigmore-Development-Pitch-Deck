@@ -77,7 +77,22 @@ export default function ZoningSurroundingsSection({ onNavigate }: ZoningSurround
               src={zoning.mapImage}
               alt="Zoning map showing Craigmore Drive and surroundings"
               className="w-full h-full object-cover"
-              style={{ aspectRatio: "16/10" }}
+              style={{ aspectRatio: "3/4" }}
+            />
+            {/* Blue glow overlay matching property outline */}
+            <div
+              className="absolute pointer-events-none"
+              style={{
+                top: "38%",
+                left: "38%",
+                width: "11%",
+                height: "6%",
+                transform: "translate(-50%, -50%)",
+                boxShadow: "0 0 20px 8px rgba(59,130,246,0.3), 0 0 40px 16px rgba(59,130,246,0.12)",
+                borderRadius: "3px",
+                border: "1.5px solid rgba(59,130,246,0.35)",
+                animation: "pulse-glow 3s ease-in-out infinite",
+              }}
             />
           </motion.div>
         </div>

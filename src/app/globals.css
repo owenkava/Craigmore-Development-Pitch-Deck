@@ -27,7 +27,7 @@
 
 @layer components {
   .slide-frame {
-    @apply min-h-screen w-full flex items-center justify-center px-8 py-16;
+    @apply min-h-screen w-full flex items-center justify-center px-4 md:px-8 py-16;
   }
 
   .slide-content {
@@ -69,10 +69,9 @@
 /* Scroll container — smooth free-scroll */
 .scroll-snap-container {
   overflow-y: auto;
-  height: 100vh;
-  height: 100dvh; /* Dynamic viewport height for mobile */
+  height: calc(100vh - 3.5rem);
+  height: calc(100dvh - 3.5rem); /* Account for header height (pt-14 = 3.5rem) */
   scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
 }
 

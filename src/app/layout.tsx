@@ -4,6 +4,7 @@ import "./globals.css";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  maximumScale: 5,
   themeColor: "#023E40",
 };
 
@@ -32,15 +33,32 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Craigmore Drive Investor Deck",
     locale: "en_CA",
+    images: [
+      {
+        url: "/images/craigmore-drone-1.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Craigmore Drive development site — Halifax, Nova Scotia",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Craigmore Drive — Investor Deck",
     description:
       "Upzoned residential development investment in Halifax, Nova Scotia.",
+    images: ["/images/craigmore-drone-1.jpg"],
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/favicon.svg",
+  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://craigmore.citracapital.ca"),
+  other: {
+    "format-detection": "telephone=no",
+    "color-scheme": "light",
   },
 };
 
@@ -69,6 +87,7 @@ export default function RootLayout({
         />
         {/* DNS prefetch for external resources */}
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
       </head>
       <body className="font-body antialiased">{children}</body>
     </html>

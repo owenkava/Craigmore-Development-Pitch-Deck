@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "../globals.css";
 
 export const metadata: Metadata = {
-  title: "Harbour Cove — Investor Deck (Print)",
+  title: "Craigmore Drive — Investor Deck (Print)",
 };
 
 export default function PrintLayout({

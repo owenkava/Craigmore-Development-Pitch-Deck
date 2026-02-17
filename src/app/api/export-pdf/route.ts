@@ -92,7 +92,7 @@ export async function GET() {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition":
-          'attachment; filename="Harbour Cove Investor Deck.pdf"',
+          'attachment; filename="Craigmore Drive Investor Deck.pdf"',
         "Cache-Control": "no-store",
       },
     });

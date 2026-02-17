@@ -111,33 +111,34 @@ export default function OpportunitySection({ onNavigate }: OpportunitySectionPro
               src={opportunity.mapImage}
               alt="Map of Halifax showing Craigmore Drive location"
               className="w-full h-full object-cover"
-              style={{ aspectRatio: "16/10" }}
+              style={{ aspectRatio: "3/4" }}
             />
-            {/* Constant subtle glow centered on orange property marker */}
+            {/* Subtle blue glow around the blue square property outline */}
             <div
               className="absolute pointer-events-none"
               style={{
-                top: "44%",
-                left: "61%",
-                width: "14%",
-                height: "16%",
+                top: "38%",
+                left: "38%",
+                width: "11%",
+                height: "6%",
                 transform: "translate(-50%, -50%)",
-                background: "radial-gradient(ellipse at center, rgba(255,160,0,0.35) 0%, rgba(255,160,0,0.12) 40%, transparent 70%)",
-                filter: "blur(8px)",
+                boxShadow: "0 0 20px 8px rgba(59,130,246,0.3), 0 0 40px 16px rgba(59,130,246,0.12)",
+                borderRadius: "3px",
+                border: "1.5px solid rgba(59,130,246,0.35)",
                 animation: "pulse-glow 3s ease-in-out infinite",
               }}
             />
-            {/* Clickable hotspot — tightly over the orange marker icon */}
+            {/* Clickable hotspot — over the blue square */}
             <div
               className="absolute cursor-pointer z-10"
-              style={{ top: "38%", left: "55%", width: "14%", height: "14%" }}
+              style={{ top: "34%", left: "32%", width: "14%", height: "10%" }}
               onMouseEnter={() => setMapHover(true)}
               onClick={() => setMapHover((prev) => !prev)}
             />
-            {/* "Harbour Cove" popup — appears on hover/click with link to listing */}
+            {/* "Craigmore Drive" popup — appears on hover/click */}
             <motion.div
               className="absolute z-20 pointer-events-none"
-              style={{ top: "22%", left: "48%", transformOrigin: "bottom center" }}
+              style={{ top: "27%", left: "31%", transformOrigin: "bottom center" }}
               initial={false}
               animate={{ opacity: mapHover ? 1 : 0, y: mapHover ? 0 : 6, scale: mapHover ? 1 : 0.95 }}
               transition={{ duration: 0.2 }}

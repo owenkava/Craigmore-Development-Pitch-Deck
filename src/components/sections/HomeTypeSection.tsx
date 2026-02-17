@@ -68,18 +68,18 @@ export default function HomeTypeSection({ onNavigate }: HomeTypeSectionProps) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-        className={`w-full max-w-[1200px] mx-auto px-8 py-20 md:py-24 relative z-10 ${
+        className={`w-full max-w-[1200px] mx-auto px-4 md:px-8 py-16 md:py-24 relative z-10 ${
           isDark ? "text-white" : "text-ink"
         }`}
       >
         <div>
           {/* Scenario toggle */}
-          <div className={`flex items-center gap-1 mb-10 ${toggleBg} rounded-full p-1 w-fit`}>
+          <div className={`flex items-center gap-1 mb-10 ${toggleBg} rounded-full p-1 w-fit max-w-full overflow-x-auto`}>
             {scenarios.map((scenario, i) => (
               <button
                 key={scenario.key}
                 onClick={() => setActiveIndex(i)}
-                className={`relative px-5 py-2 rounded-full text-body-sm font-medium transition-colors duration-300 ${
+                className={`relative px-3 md:px-5 py-2 rounded-full text-body-sm font-medium transition-colors duration-300 whitespace-nowrap ${
                   activeIndex === i ? toggleActive : toggleInactive
                 }`}
               >

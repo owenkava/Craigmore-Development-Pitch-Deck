@@ -142,6 +142,9 @@ export default function Home() {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (showGrid) return;
+      // Don't intercept keyboard events when user is interacting with form elements
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
       if (e.key === "ArrowDown" || e.key === "ArrowRight") {
         e.preventDefault();
         if (activeSection < sections.length - 1) {

@@ -30,6 +30,8 @@ export default function ImagePlaceholder({
         <img
           src={src}
           alt={label}
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover"
           onLoad={() => setLoaded(true)}
           onError={() => setErrored(true)}
@@ -45,6 +47,7 @@ export default function ImagePlaceholder({
             stroke="currentColor"
             strokeWidth="1"
             className="mb-2 opacity-30"
+            aria-hidden="true"
           >
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
             <circle cx="8.5" cy="8.5" r="1.5" />

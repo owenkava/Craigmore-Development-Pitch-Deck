@@ -13,6 +13,7 @@ import {
   financialsMaxDensity,
   financialsTownhomes,
   closing,
+  closingScenarios,
 } from "@/data/deck";
 import {
   PieChart,
@@ -490,17 +491,16 @@ export default function PrintPage() {
         <SectionTitle sub={townhomeUnit.tagline}>{townhomeUnit.name}</SectionTitle>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px", marginTop: "8px" }}>
           <div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "16px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: townhomeUnit.floorPlanImage ? "1fr 1fr" : "1fr", gap: "12px", marginBottom: "16px" }}>
               <div style={{ borderRadius: "10px", overflow: "hidden", height: "200px", position: "relative" }}>
                 {townhomeUnit.exteriorImage ? <SlideImage src={townhomeUnit.exteriorImage} alt="Townhome exterior" /> :
                   <div style={{ background: "rgba(255,255,255,0.6)", width: "100%", height: "100%" }} />}
               </div>
-              <div style={{ borderRadius: "10px", overflow: "hidden", height: "200px", position: "relative", background: "rgba(255,255,255,0.4)" }}>
-                {townhomeUnit.floorPlanImage ? <SlideImage src={townhomeUnit.floorPlanImage} alt="Townhome floor plan" /> :
-                  <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <span style={{ fontSize: "11px", color: BRAND.muted }}>Floor Plan</span>
-                  </div>}
-              </div>
+              {townhomeUnit.floorPlanImage && (
+                <div style={{ borderRadius: "10px", overflow: "hidden", height: "200px", position: "relative", background: "rgba(255,255,255,0.4)" }}>
+                  <SlideImage src={townhomeUnit.floorPlanImage} alt="Townhome floor plan" />
+                </div>
+              )}
             </div>
             <h4 style={{ fontSize: "11px", fontWeight: 600, marginBottom: "8px" }}>Key Features</h4>
             <ul style={{ listStyle: "none", padding: 0 }}>
@@ -819,21 +819,21 @@ export default function PrintPage() {
           <div>
             <h4 style={{ fontSize: "12px", fontWeight: 600, color: "white", marginBottom: "16px" }}>Capital Ask</h4>
             <span style={{ fontSize: "36px", fontWeight: 700, color: "white", display: "block", marginBottom: "4px" }}>
-              {closing.capitalAsk}
+              {closingScenarios[0].capitalAsk}
             </span>
             <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", display: "block", marginBottom: "16px" }}>
-              Min. investment: {closing.minimumInvestment}
+              Min. investment: {closingScenarios[0].minimumInvestment}
             </span>
             <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 12px", fontSize: "11px" }}>
               <span style={{ color: "rgba(255,255,255,0.45)" }}>Structure</span>
-              <span style={{ color: "rgba(255,255,255,0.8)" }}>{closing.structure}</span>
+              <span style={{ color: "rgba(255,255,255,0.8)" }}>{closingScenarios[0].structure}</span>
               <span style={{ color: "rgba(255,255,255,0.45)" }}>Target Close</span>
-              <span style={{ color: "rgba(255,255,255,0.8)" }}>{closing.targetClose}</span>
+              <span style={{ color: "rgba(255,255,255,0.8)" }}>{closingScenarios[0].targetClose}</span>
               <span style={{ color: "rgba(255,255,255,0.45)" }}>Equity Offered</span>
-              <span style={{ color: "rgba(255,255,255,0.8)" }}>{closing.equityOffered}</span>
+              <span style={{ color: "rgba(255,255,255,0.8)" }}>{closingScenarios[0].equityOffered}</span>
             </div>
             <div style={{ marginTop: "12px", padding: "10px", background: "rgba(255,255,255,0.08)", borderRadius: "6px" }}>
-              <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)", lineHeight: 1.5 }}>{closing.investorTerms}</p>
+              <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)", lineHeight: 1.5 }}>{closingScenarios[0].investorTerms}</p>
             </div>
           </div>
 
@@ -841,7 +841,7 @@ export default function PrintPage() {
           <div>
             <h4 style={{ fontSize: "12px", fontWeight: 600, color: "white", marginBottom: "16px" }}>Use of Funds</h4>
             <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "6px 12px", fontSize: "11px" }}>
-              {closing.useOfFunds.map((item) => (
+              {closingScenarios[0].useOfFunds.map((item: { label: string; amount: string; percent: string }) => (
                 <div key={item.label} style={{ display: "contents" }}>
                   <span style={{ color: "rgba(255,255,255,0.45)" }}>{item.label}</span>
                   <span style={{ color: "rgba(255,255,255,0.8)", fontWeight: 500, textAlign: "right" }}>{item.amount}</span>
@@ -855,7 +855,7 @@ export default function PrintPage() {
           <div>
             <h4 style={{ fontSize: "12px", fontWeight: 600, color: "white", marginBottom: "16px" }}>Key Dates</h4>
             <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "6px 12px", fontSize: "11px" }}>
-              {closing.timeline.map((item) => (
+              {closingScenarios[0].timeline.map((item: { date: string; event: string }) => (
                 <div key={item.date + item.event} style={{ display: "contents" }}>
                   <span style={{ color: "rgba(255,255,255,0.7)", fontFamily: "'JetBrains Mono', monospace", whiteSpace: "nowrap" }}>{item.date}</span>
                   <span style={{ color: "rgba(255,255,255,0.55)" }}>{item.event}</span>

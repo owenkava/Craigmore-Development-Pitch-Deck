@@ -34,12 +34,12 @@ export default function FinancialsSection({ onNavigate }: FinancialsSectionProps
         </h2>
 
         {/* Scenario toggle */}
-        <div className="flex items-center gap-1 mb-10 bg-ink/5 rounded-full p-1 w-fit">
+        <div className="flex items-center gap-1 mb-10 bg-ink/5 rounded-full p-1 w-fit max-w-full overflow-x-auto">
           {scenarioOptions.map((option, i) => (
             <button
               key={option.key}
               onClick={() => setActiveIndex(i)}
-              className={`relative px-5 py-2 rounded-full text-body-sm font-medium transition-colors duration-300 ${
+              className={`relative px-3 md:px-5 py-2 rounded-full text-body-sm font-medium transition-colors duration-300 whitespace-nowrap ${
                 activeIndex === i
                   ? "text-white"
                   : "text-ink/50 hover:text-ink/70"

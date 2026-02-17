@@ -37,13 +37,13 @@ export default function SectionNav({ currentIndex, onNavigate }: SectionNavProps
       </button>
 
       {/* Dots */}
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-0.5">
         {sections.map((_, i) => (
           <button
             key={i}
             onClick={() => onNavigate(i)}
             aria-label={`Go to ${sections[i].navLabel}`}
-            className="p-0.5"
+            className="p-2"
           >
             <motion.div
               className={`rounded-full transition-colors ${

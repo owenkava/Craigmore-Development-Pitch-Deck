@@ -59,7 +59,7 @@ export const cover = {
   tagline: "A Citra Capital Development",
   date: "February 2026",
   location: "Halifax, Nova Scotia",
-  backgroundImage: "/images/property-2.jpg",
+  backgroundImage: "/images/craigmore-drone-1.jpg",
 };
 
 export const team: TeamMember[] = [
@@ -108,7 +108,7 @@ export const opportunity = {
     timeline: "24–30 months",
     renderImage: "/images/placeholder-subdivision-render.png",
   },
-  mapImage: "/images/cole-harbour-map.png",
+  mapImage: "/images/craigmore-map-site.png",
   locationStats: [
     { icon: "transit", label: "Halifax Transit", detail: "Multiple bus routes within walking distance" },
     { icon: "highway", label: "Highway Access", detail: "Quick connection via major corridors" },
@@ -167,16 +167,15 @@ export const property = {
   topography: "[TBD — site characteristics]",
   access: "Frontage on Craigmore Drive with neighbourhood road access",
   sitePlanImage: "/images/site-plan.jpg",
-  locationImage: "/images/location-map.jpg",
+  locationImage: "/images/craigmore-map-site.png",
   galleryImages: [
-    { src: "/images/property-1.jpg", caption: "Aerial view of the property and surrounding neighbourhood" },
-    { src: "/images/property-2.jpg", caption: "Street frontage along Craigmore Drive" },
-    { src: "/images/property-3.jpg", caption: "Development-ready land with established surroundings" },
+    { src: "/images/craigmore-drone-1.jpg", caption: "Aerial drone view of Craigmore Drive and surrounding neighbourhood" },
+    { src: "/images/craigmore-drone-2.jpg", caption: "Drone perspective of the development site and streetscape" },
+    { src: "/images/craigmore-map-site.png", caption: "Satellite view with property boundary outlined" },
   ],
   constraints: [
-    "[Placeholder constraint — to be updated]",
-    "[Placeholder constraint — to be updated]",
-    "[Placeholder constraint — to be updated]",
+    "Rock-wall / bedrock exposure along the western perimeter of the westernmost lot — may require blasting or engineered foundation solutions",
+    "New water line required from the lot at the corner of Joseph Howe Drive and Craigmore Drive — estimated cost $150,000–$175,000",
   ],
   advantages: [
     "R-3 as-of-right zoning for up to 38 units — no rezoning required",
@@ -218,7 +217,7 @@ export const zoning = {
     "Nearby parks, lakes, and trail systems for recreation",
     "Well-maintained streetscape with mature tree canopy",
   ],
-  mapImage: "/images/cole-harbour-map.png",
+  mapImage: "/images/craigmore-map-site.png",
   advantages: [
     "No rezoning application required — saves 12–18 months",
     "R-3 as-of-right status reduces approval uncertainty to near zero",
@@ -228,33 +227,33 @@ export const zoning = {
   ],
 };
 
-/* ── Scenario A: 24 Premium Condo Units ── */
+/* ── Scenario A: 24 Premium Condo Units (12 Townhomes × 2 Units Each) ── */
 
 export const premiumCondoUnit: HomeType = {
   id: "premium-condo",
   name: "Premium Condo (24 Units)",
-  tagline: "Balanced density with presale-driven financing strategy — premium finishes, efficient layouts, and strong rental or resale potential in a growing Halifax corridor",
+  tagline: "12 two-storey townhomes yielding 24 saleable units (12×1BR + 12×2BR) with seller-friendly pricing, 18-month build timeline, and strong investor returns via LP/GP waterfall structure",
   specs: [
-    { label: "Bedrooms", value: "1–3" },
-    { label: "Bathrooms", value: "1–2" },
-    { label: "Unit Size", value: "750–1,500 sq ft" },
-    { label: "Total Units", value: "24" },
-    { label: "Stories", value: "4" },
-    { label: "Parking", value: "Underground + surface" },
-    { label: "Storage", value: "In-suite + locker" },
-    { label: "Amenities", value: "Fitness, lounge, rooftop" },
+    { label: "Buildings", value: "12 townhomes" },
+    { label: "Saleable Units", value: "24 (12×1BR + 12×2BR)" },
+    { label: "2BR Price Range", value: "$745,000 – $889,000" },
+    { label: "1BR Price Range", value: "$445,000 – $539,000" },
+    { label: "Target Schedule", value: "18 months" },
+    { label: "Construction Loan", value: "70% LTC" },
+    { label: "Investor Structure", value: "LP equity, 8% pref + 60/40 split" },
+    { label: "Infrastructure", value: "New water line included" },
   ],
   floorPlanImage: "",
-  exteriorImage: "",
-  targetBuyer: "Young professionals, downsizers, and investors seeking premium low-maintenance living with strong rental demand and resale values in an established Halifax neighbourhood.",
-  priceBand: "$400,000 – $700,000",
+  exteriorImage: "/images/townhome-exterior.jpg",
+  targetBuyer: "Young professionals, downsizers, and families seeking modern 1BR or 2BR townhome-style condo units priced between $445K–$889K in a desirable Halifax neighbourhood — with long-term rental conversion optionality providing downside protection.",
+  priceBand: "$445,000 – $889,000",
   features: [
-    "Open-concept layouts with floor-to-ceiling windows and 9' ceilings",
-    "Premium quartz countertops and soft-close cabinetry throughout",
-    "In-suite laundry and climate-controlled storage",
-    "Energy-efficient heat pump system and high-performance building envelope",
-    "Shared rooftop terrace with neighbourhood views",
-    "Secure underground parking with EV charging infrastructure",
+    "24 saleable units across 12 townhome buildings — 12 one-bedroom and 12 two-bedroom (2-storey)",
+    "Mid-case revenue of $15.7M with stress-tested downside still delivering 16.2% IRR",
+    "LP investor structure with 8% preferred return and 60/40 LP/GP profit split",
+    "All units convertible to long-term rentals for downside protection and regulatory flexibility",
+    "New water line installation and full site infrastructure included in budget",
+    "18-month construction timeline with presale campaign option to de-risk",
   ],
 };
 
@@ -275,7 +274,7 @@ export const maxDensityCondoUnit: HomeType = {
     { label: "Common Areas", value: "8,066 sq ft" },
   ],
   floorPlanImage: "",
-  exteriorImage: "",
+  exteriorImage: "/images/38-unit-craigmore-render.jpeg",
   targetBuyer: "Downsizers, professionals, and empty nesters seeking premium 2-bed+den units in Halifax's luxury residential segment with high-end amenities and underground parking.",
   priceBand: "$1,195,000 – $1,895,000",
   features: [
@@ -305,7 +304,7 @@ export const townhomeUnit: HomeType = {
     { label: "Infrastructure", value: "New water line included" },
   ],
   floorPlanImage: "",
-  exteriorImage: "",
+  exteriorImage: "/images/craigmore-12-townhouses.jpg",
   targetBuyer: "Families, multi-generational households, and move-up buyers seeking spacious 3-bed/3-bath townhomes with in-law suite flexibility at $950K in a desirable Halifax neighbourhood.",
   priceBand: "$950,000",
   features: [
@@ -318,81 +317,93 @@ export const townhomeUnit: HomeType = {
   ],
 };
 
-/* ── Financials: Scenario A — 24 Premium Condos ── */
+/* ── Financials: Scenario A — 24 Premium Condos (12 Townhomes × 2 Units) ── */
 
 export const financialsPremiumCondos = {
   summary: {
-    totalProjectCost: "$12.4M",
-    totalRevenue: "$17.2M",
-    netProfit: "$4.8M",
-    equityRequired: "$3.6M",
-    debtFinancing: "$8.8M",
-    projectedIRR: "28.8%",
-    equityMultiple: "2.3x",
-    projectTimeline: "24–28 months",
+    totalProjectCost: "$11.7M",
+    totalRevenue: "$15.7M (Mid Case)",
+    netProfit: "$4.0M (Mid Case)",
+    equityRequired: "$3.5M",
+    debtFinancing: "$8.2M (70% LTC)",
+    projectedIRR: "44.3% (Mid Case)",
+    equityMultiple: "1.73x (Mid Case)",
+    projectTimeline: "18 months",
   },
   costBreakdown: [
-    { label: "Land Acquisition", values: ["$1,800,000", "15%"] },
-    { label: "Site Development & Servicing", values: ["$1,600,000", "13%"] },
-    { label: "Building Construction (24 units)", values: ["$6,800,000", "55%"] },
-    { label: "Soft Costs & Approvals", values: ["$1,000,000", "8%"] },
-    { label: "Marketing & Sales", values: ["$500,000", "4%"] },
+    { label: "Land Acquisition", values: ["$2,000,000", "17%"] },
+    { label: "Vertical Construction", values: ["$6,000,000", "51%"] },
+    { label: "Site Prep & Civil", values: ["$500,000", "4%"] },
+    { label: "Water Line / Infrastructure", values: ["$162,500", "1%"] },
+    { label: "Hard Cost Contingency (10%)", values: ["$666,250", "6%"] },
+    { label: "GC / Developer Fee (15%)", values: ["$999,375", "9%"] },
+    { label: "Permits & Municipal Fees", values: ["$432,000", "4%"] },
     { label: "Financing Costs", values: ["$400,000", "3%"] },
-    { label: "Contingency", values: ["$300,000", "2%"] },
-    { label: "Total Project Cost", values: ["$12,400,000", "100%"], highlight: true },
+    { label: "Sales & Marketing (3.5%)", values: ["$549,780", "5%"] },
+    { label: "Total Project Cost", values: ["$11,709,905", "100%"], highlight: true },
   ] as FinancialRow[],
   revenueBreakdown: [
-    { label: "1-Bed Units (8 × avg $420K)", values: ["$3,360,000", "20%"] },
-    { label: "2-Bed Units (10 × avg $560K)", values: ["$5,600,000", "33%"] },
-    { label: "3-Bed Units (4 × avg $680K)", values: ["$2,720,000", "16%"] },
-    { label: "Penthouse Units (2 × avg $700K)", values: ["$1,400,000", "8%"] },
-    { label: "Upgrades & Premiums", values: ["$4,120,000", "24%"] },
-    { label: "Total Revenue", values: ["$17,200,000", "100%"], highlight: true },
+    { label: "2BR Units (12 × $745K–$889K)", values: ["$8,940,000 – $10,668,000", "63%"] },
+    { label: "1BR Units (12 × $445K–$539K)", values: ["$5,340,000 – $6,468,000", "37%"] },
+    { label: "Total Revenue (Low – High)", values: ["$14,280,000 – $17,136,000", "100%"], highlight: true },
   ] as FinancialRow[],
   timeline: [
-    { phase: "Q1–Q2 2026", milestone: "Land closing, design & permitting" },
-    { phase: "Q3–Q4 2026", milestone: "Pre-sales launch, construction start" },
-    { phase: "Q1–Q2 2027", milestone: "Structure complete, interior fit-out" },
-    { phase: "Q3–Q4 2027", milestone: "Closings begin, unit deliveries" },
-    { phase: "Q1 2028", milestone: "Final deliveries, project wind-down" },
+    { phase: "Q1–Q2 2026", milestone: "Land closing, planning, permits & financing" },
+    { phase: "Q2–Q3 2026", milestone: "Presale campaign launch ($50K marketing)" },
+    { phase: "Q3 2026–Q4 2027", milestone: "Construction — 18-month build" },
+    { phase: "Q1 2028", milestone: "Unit closings and investor distributions" },
   ],
   sensitivity: [
-    { scenario: "Worst Case", irr: "14.2%", multiple: "1.6x", profit: "$2.2M" },
-    { scenario: "Base Case", irr: "28.8%", multiple: "2.3x", profit: "$4.8M" },
-    { scenario: "Best Case", irr: "37.5%", multiple: "2.8x", profit: "$6.8M" },
-    { scenario: "Delay (6 months)", irr: "22.4%", multiple: "2.1x", profit: "$4.0M" },
+    { scenario: "Stress (−10% vs Low)", irr: "16.2%", multiple: "1.25x", profit: "$1.2M" },
+    { scenario: "Low Case", irr: "30.9%", multiple: "1.50x", profit: "$2.6M" },
+    { scenario: "Mid Case", irr: "44.3%", multiple: "1.73x", profit: "$4.0M" },
+    { scenario: "High Case", irr: "57.2%", multiple: "1.97x", profit: "$5.4M" },
   ],
   revenueScenarios: {
-    worst:  { units: "$13,760,000", total: "$13,760,000" },
-    likely: { units: "$17,200,000", total: "$17,200,000" },
-    best:   { units: "$20,640,000", total: "$20,640,000" },
+    worst:  { units: "$12,852,000", total: "$12,852,000" },
+    likely: { units: "$15,708,000", total: "$15,708,000" },
+    best:   { units: "$17,136,000", total: "$17,136,000" },
+  },
+  waterfall: {
+    prefReturn: "8% annually (12% total over 18 months)",
+    lpGpSplit: "60% LP / 40% GP after pref",
+    investorEquity: "$3,497,978",
+    scenarios: [
+      { scenario: "Low", lpProfit: "$1,739,948", gpProfit: "$880,127", lpTotal: "$5,237,925" },
+      { scenario: "Mid", lpProfit: "$2,566,760", gpProfit: "$1,431,335", lpTotal: "$6,064,737" },
+      { scenario: "High", lpProfit: "$3,393,572", gpProfit: "$1,982,543", lpTotal: "$6,891,549" },
+      { scenario: "Stress", lpProfit: "$883,148", gpProfit: "$308,927", lpTotal: "$4,381,125" },
+    ],
+  },
+  capitalStack: {
+    investorEquity: "$3,497,978",
+    constructionLoan: "$8,161,947",
+    totalCapital: "$11,659,925",
   },
   chartData: {
     costPie: [
-      { name: "Land", value: 1800000, color: "#023E40" },
-      { name: "Site Dev", value: 1600000, color: "#124546" },
-      { name: "Construction", value: 6800000, color: "#2a6b6d" },
-      { name: "Soft Costs", value: 1000000, color: "#5a7e7f" },
-      { name: "Marketing", value: 500000, color: "#8aacad" },
-      { name: "Financing", value: 400000, color: "#a3d9db" },
-      { name: "Contingency", value: 300000, color: "#D0ECED" },
+      { name: "Land", value: 2000000, color: "#023E40" },
+      { name: "Construction", value: 6000000, color: "#124546" },
+      { name: "Site & Infrastructure", value: 662500, color: "#2a6b6d" },
+      { name: "Contingency", value: 666250, color: "#3d8586" },
+      { name: "GC / Developer Fee", value: 999375, color: "#5a7e7f" },
+      { name: "Permits", value: 432000, color: "#8aacad" },
+      { name: "Marketing", value: 549780, color: "#a3d9db" },
+      { name: "Financing", value: 400000, color: "#D0ECED" },
     ],
     revenuePie: [
-      { name: "1-Bed", value: 3360000, color: "#023E40" },
-      { name: "2-Bed", value: 5600000, color: "#124546" },
-      { name: "3-Bed", value: 2720000, color: "#2a6b6d" },
-      { name: "Penthouse", value: 1400000, color: "#5a7e7f" },
-      { name: "Upgrades", value: 4120000, color: "#D0ECED" },
+      { name: "2BR Units (12)", value: 9804000, color: "#023E40" },
+      { name: "1BR Units (12)", value: 5904000, color: "#2a6b6d" },
     ],
     cashflow: [
-      { quarter: "Q1 '26", inflow: 0, outflow: -1800, cumulative: -1800 },
-      { quarter: "Q2 '26", inflow: 0, outflow: -1400, cumulative: -3200 },
-      { quarter: "Q3 '26", inflow: 900, outflow: -1800, cumulative: -4100 },
-      { quarter: "Q4 '26", inflow: 2800, outflow: -1600, cumulative: -2900 },
-      { quarter: "Q1 '27", inflow: 3600, outflow: -1400, cumulative: -700 },
-      { quarter: "Q2 '27", inflow: 4200, outflow: -1100, cumulative: 2400 },
-      { quarter: "Q3 '27", inflow: 3800, outflow: -700, cumulative: 5500 },
-      { quarter: "Q4 '27", inflow: 1900, outflow: -300, cumulative: 7100 },
+      { quarter: "Q1 '26", inflow: 0, outflow: -2000, cumulative: -2000 },
+      { quarter: "Q2 '26", inflow: 0, outflow: -1200, cumulative: -3200 },
+      { quarter: "Q3 '26", inflow: 0, outflow: -2000, cumulative: -5200 },
+      { quarter: "Q4 '26", inflow: 1500, outflow: -2000, cumulative: -5700 },
+      { quarter: "Q1 '27", inflow: 3000, outflow: -2000, cumulative: -4700 },
+      { quarter: "Q2 '27", inflow: 4500, outflow: -1500, cumulative: -1700 },
+      { quarter: "Q3 '27", inflow: 4500, outflow: -1000, cumulative: 1800 },
+      { quarter: "Q4 '27", inflow: 2200, outflow: -500, cumulative: 3500 },
     ],
   },
 };
@@ -540,28 +551,101 @@ export const financialsTownhomes = {
   },
 };
 
+export interface ClosingScenario {
+  key: string;
+  label: string;
+  capitalAsk: string;
+  minimumInvestment: string;
+  targetClose: string;
+  structure: string;
+  equityOffered: string;
+  investorTerms: string;
+  useOfFunds: { label: string; amount: string; percent: string }[];
+  timeline: { date: string; event: string }[];
+}
+
+export const closingScenarios: ClosingScenario[] = [
+  {
+    key: "premium-condos",
+    label: "24 Premium Condos",
+    capitalAsk: "$3,497,978",
+    minimumInvestment: "$250,000",
+    targetClose: "Q1 2026",
+    structure: "Limited Partnership (LP/GP)",
+    equityOffered: "60% LP / 40% GP after 8% pref",
+    investorTerms:
+      "8% preferred return (12% total over 18 months). Remaining profit split 60/40 LP/GP. Full capital returned before any profit distributions.",
+    useOfFunds: [
+      { label: "Land Acquisition", amount: "$2,000,000", percent: "17%" },
+      { label: "Construction & Site Work", amount: "$6,500,000", percent: "56%" },
+      { label: "GC / Developer Fee", amount: "$999,375", percent: "9%" },
+      { label: "Permits & Municipal Fees", amount: "$432,000", percent: "4%" },
+      { label: "Marketing & Sales", amount: "$549,780", percent: "5%" },
+      { label: "Financing & Contingency", amount: "$1,066,250", percent: "9%" },
+    ],
+    timeline: [
+      { date: "Q1 2026", event: "Capital raise close & land acquisition" },
+      { date: "Q1–Q2 2026", event: "Planning, permits & financing" },
+      { date: "Q2–Q3 2026", event: "Presale campaign launch" },
+      { date: "Q3 2026", event: "Construction commences (18-month build)" },
+      { date: "Q4 2027", event: "Unit closings begin" },
+      { date: "Q1 2028", event: "Final distributions to investors" },
+    ],
+  },
+  {
+    key: "max-density",
+    label: "38 Luxury Condos",
+    capitalAsk: "$12,458,029",
+    minimumInvestment: "$250,000",
+    targetClose: "Q1 2026",
+    structure: "Limited Partnership",
+    equityOffered: "75% Investor / 25% Developer",
+    investorTerms:
+      "Full capital returned to investors before any profit distributions. 75/25 profit split (investor/developer).",
+    useOfFunds: [
+      { label: "Land Acquisition", amount: "$2,000,000", percent: "6%" },
+      { label: "Construction (82,636 sq ft)", amount: "$26,856,700", percent: "75%" },
+      { label: "Contingency (10%)", amount: "$2,685,670", percent: "8%" },
+      { label: "Marketing & Sales (4%)", amount: "$2,252,000", percent: "6%" },
+      { label: "Financing Costs", amount: "$1,800,000", percent: "5%" },
+    ],
+    timeline: [
+      { date: "Q1 2026", event: "Capital raise close & land acquisition" },
+      { date: "Q1–Q2 2026", event: "Planning, permits & financing" },
+      { date: "Q3 2026", event: "Construction commences" },
+      { date: "Q3 2028", event: "Unit closings begin" },
+      { date: "Q1 2029", event: "Project completion & final distributions" },
+    ],
+  },
+  {
+    key: "townhomes",
+    label: "12 Townhomes",
+    capitalAsk: "$2,867,000",
+    minimumInvestment: "$250,000",
+    targetClose: "Q1 2026",
+    structure: "Limited Partnership",
+    equityOffered: "75% Investor / 25% Developer",
+    investorTerms:
+      "Full capital returned to investors before any profit distributions. 75/25 profit split (investor/developer).",
+    useOfFunds: [
+      { label: "Land Acquisition", amount: "$2,000,000", percent: "21%" },
+      { label: "Building Construction", amount: "$6,000,000", percent: "63%" },
+      { label: "Water Line & Site Work", amount: "$350,000", percent: "4%" },
+      { label: "Soft Costs (Arch, Eng, Legal)", amount: "$325,000", percent: "3%" },
+      { label: "Marketing & Sales", amount: "$342,000", percent: "4%" },
+      { label: "Insurance, Contingency & Financing", amount: "$525,000", percent: "6%" },
+    ],
+    timeline: [
+      { date: "Q1 2026", event: "Capital raise close & land acquisition" },
+      { date: "Q1–Q2 2026", event: "Planning, permits & water line install" },
+      { date: "Q3 2026", event: "Construction commences" },
+      { date: "Q4 2027", event: "Construction completion" },
+      { date: "Q1–Q3 2028", event: "Unit closings & final distributions" },
+    ],
+  },
+];
+
 export const closing = {
-  capitalAsk: "$12,458,029",
-  minimumInvestment: "$250,000",
-  targetClose: "Q1 2026",
-  structure: "Limited Partnership",
-  equityOffered: "75% Investor / 25% Developer",
-  investorTerms: "Full capital returned to investors before any profit distributions. 75/25 profit split (investor/developer).",
-  useOfFunds: [
-    { label: "Land Acquisition", amount: "$2,000,000", percent: "16%" },
-    { label: "Construction & Site Work", amount: "$7,206,700", percent: "58%" },
-    { label: "Contingency & Insurance", amount: "$2,810,670", percent: "23%" },
-    { label: "Marketing & Pre-Sales", amount: "$252,000", percent: "2%" },
-    { label: "Working Capital Reserve", amount: "$188,659", percent: "2%" },
-  ],
-  timeline: [
-    { date: "Q1 2026", event: "Capital raise close" },
-    { date: "Q1 2026", event: "Land acquisition complete" },
-    { date: "Q1–Q2 2026", event: "Planning, permits & financing" },
-    { date: "Q3 2026", event: "Construction commences" },
-    { date: "Q3 2028", event: "Unit closings begin" },
-    { date: "Q1 2029", event: "Project completion and final distributions" },
-  ],
   contact: {
     name: "Sam Gillett",
     title: "Managing Partner, Citra Capital",

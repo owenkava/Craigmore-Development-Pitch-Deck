@@ -34,7 +34,7 @@ export default function SectionShell({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-        className={`w-full max-w-[1200px] mx-auto px-8 py-20 md:py-24 ${
+        className={`w-full max-w-[1200px] mx-auto px-4 md:px-8 py-16 md:py-24 ${
           isDark ? "text-white" : "text-ink"
         }`}
       >
