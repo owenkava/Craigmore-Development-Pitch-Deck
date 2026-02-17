@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-surface text-ink font-body;
+  }
+
+  ::selection {
+    @apply bg-accent/10 text-ink;
+  }
+}
+
+@layer components {
+  .slide-frame {
+    @apply min-h-screen w-full flex items-center justify-center px-8 py-16;
+  }
+
+  .slide-content {
+    @apply w-full max-w-[1200px] mx-auto;
+  }
+
+  .section-label {
+    @apply text-caption font-mono uppercase tracking-widest text-ink-muted mb-4;
+  }
+
+  .stat-number {
+    @apply text-display-md font-display font-bold tracking-tight text-ink;
+  }
+
+  .stat-label {
+    @apply text-body-sm text-ink-muted mt-1;
+  }
+
+  .card-base {
+    @apply bg-surface rounded-card p-6 shadow-card transition-all duration-300 ease-smooth;
+  }
+
+  .card-interactive {
+    @apply card-base hover:shadow-card-hover hover:-translate-y-0.5 cursor-pointer;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .snap-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+  }
+}
+
+/* Scroll container — smooth free-scroll */
+.scroll-snap-container {
+  overflow-y: auto;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+/* GPU-accelerate section transitions */
+.snap-section {
+  transform: translateZ(0);
+}
+
+/* Custom scrollbar */
+.scroll-snap-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scroll-snap-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-snap-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+.scroll-snap-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Pulse animation for map glow */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
