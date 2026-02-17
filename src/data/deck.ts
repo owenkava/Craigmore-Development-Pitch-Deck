@@ -249,7 +249,7 @@ export const premiumCondoUnit: HomeType = {
   priceBand: "$445,000 – $889,000",
   features: [
     "24 saleable units across 12 townhome buildings — 12 one-bedroom and 12 two-bedroom (2-storey)",
-    "Mid-case revenue of $15.7M with stress-tested downside still delivering 16.2% IRR",
+    "Projected revenue of $14.3M – $17.1M with stress-tested downside still delivering 16.2% IRR",
     "LP investor structure with 8% preferred return and 60/40 LP/GP profit split",
     "All units convertible to long-term rentals for downside protection and regulatory flexibility",
     "New water line installation and full site infrastructure included in budget",
@@ -322,12 +322,12 @@ export const townhomeUnit: HomeType = {
 export const financialsPremiumCondos = {
   summary: {
     totalProjectCost: "$11.7M",
-    totalRevenue: "$15.7M (Mid Case)",
-    netProfit: "$4.0M (Mid Case)",
+    totalRevenue: "$14.3M – $17.1M",
+    netProfit: "$2.6M – $5.4M",
     equityRequired: "$3.5M",
     debtFinancing: "$8.2M (70% LTC)",
-    projectedIRR: "44.3% (Mid Case)",
-    equityMultiple: "1.73x (Mid Case)",
+    projectedIRR: "30.9% – 57.2%",
+    equityMultiple: "1.50x – 1.97x",
     projectTimeline: "18 months",
   },
   costBreakdown: [
