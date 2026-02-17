@@ -53,7 +53,7 @@ export default function HomeTypeSection({ onNavigate }: HomeTypeSectionProps) {
   return (
     <section
       id="homes"
-      className="snap-section min-h-screen w-full flex items-center justify-center relative overflow-hidden"
+      className="snap-section min-h-screen w-full flex items-center justify-center relative"
       data-section-index={4}
     >
       {/* Animated background */}
