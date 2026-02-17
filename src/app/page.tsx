@@ -198,7 +198,7 @@ export default function Home() {
             {/* Grid header */}
             <div className="mb-12">
               <span className="section-label">Investor Deck</span>
-              <h1 className="text-display-lg font-display font-bold tracking-tight text-ink mb-2">
+              <h1 className="text-display-md sm:text-display-lg font-display font-bold tracking-tight text-ink mb-2">
                 Craigmore Drive
               </h1>
               <p className="text-body-lg text-ink-light max-w-xl">

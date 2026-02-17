@@ -14,7 +14,7 @@ export default function ZoningSurroundingsSection({ onNavigate }: ZoningSurround
     <SectionShell id="zoning" index={3}>
       <div>
         <span className="section-label">Zoning &amp; Surroundings</span>
-        <h2 className="text-display-md font-display font-bold tracking-tight text-ink mb-3 max-w-3xl">
+        <h2 className="text-display-sm sm:text-display-md font-display font-bold tracking-tight text-ink mb-3 max-w-3xl">
           {zoning.headline}
         </h2>
         <p className="text-body-lg text-ink-light max-w-2xl mb-12">

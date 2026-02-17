@@ -74,12 +74,12 @@ export default function HomeTypeSection({ onNavigate }: HomeTypeSectionProps) {
       >
         <div>
           {/* Scenario toggle */}
-          <div className={`flex items-center gap-1 mb-10 ${toggleBg} rounded-full p-1 w-fit max-w-full overflow-x-auto`}>
+          <div className={`flex flex-wrap items-center gap-1 mb-10 ${toggleBg} rounded-full p-1 w-fit max-w-full`}>
             {scenarios.map((scenario, i) => (
               <button
                 key={scenario.key}
                 onClick={() => setActiveIndex(i)}
-                className={`relative px-3 md:px-5 py-2 rounded-full text-body-sm font-medium transition-colors duration-300 whitespace-nowrap ${
+                className={`relative px-3 md:px-5 py-2 rounded-full text-body-sm font-medium transition-colors duration-300 ${
                   activeIndex === i ? toggleActive : toggleInactive
                 }`}
               >

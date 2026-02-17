@@ -14,10 +14,12 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-surface text-ink font-body;
+    overflow-x: hidden;
   }
 
   ::selection {
@@ -69,6 +71,7 @@
 /* Scroll container — smooth free-scroll */
 .scroll-snap-container {
   overflow-y: auto;
+  overflow-x: hidden;
   height: calc(100vh - 3.5rem);
   height: calc(100dvh - 3.5rem); /* Account for header height (pt-14 = 3.5rem) */
   scroll-behavior: smooth;

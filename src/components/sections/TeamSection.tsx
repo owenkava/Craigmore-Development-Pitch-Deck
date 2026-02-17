@@ -45,7 +45,7 @@ export default function TeamSection({ onNavigate }: TeamSectionProps) {
     <SectionShell id="team" index={6}>
       <div>
         <span className="section-label">Our Team</span>
-        <h2 className="text-display-md font-display font-bold tracking-tight text-ink mb-2">
+        <h2 className="text-display-sm sm:text-display-md font-display font-bold tracking-tight text-ink mb-2">
           Experienced Builders & Operators
         </h2>
         <p className="text-body-lg text-ink-light max-w-2xl mb-12">

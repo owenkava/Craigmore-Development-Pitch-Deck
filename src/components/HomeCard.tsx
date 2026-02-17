@@ -21,7 +21,7 @@ export default function HomeCard({ home, dark = false }: HomeCardProps) {
       {/* Header */}
       <div>
         <span className={`section-label ${dark ? "!text-white/40" : ""}`}>{home.name}</span>
-        <h2 className={`text-display-md font-display font-bold tracking-tight ${txt} mb-2`}>
+        <h2 className={`text-display-sm sm:text-display-md font-display font-bold tracking-tight ${txt} mb-2`}>
           {home.name}
         </h2>
         <p className={`text-body-lg ${txtLight} max-w-xl`}>{home.tagline}</p>

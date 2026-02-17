@@ -27,7 +27,7 @@ export default function StatBlock({
       className="space-y-2"
     >
       <span
-        className={`block text-display-md font-display font-bold tracking-tight ${
+        className={`block text-display-sm sm:text-display-md font-display font-bold tracking-tight ${
           dark ? "text-white" : "text-ink"
         }`}
       >

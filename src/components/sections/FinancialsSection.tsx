@@ -29,17 +29,17 @@ export default function FinancialsSection({ onNavigate }: FinancialsSectionProps
     <SectionShell id="financials" index={5}>
       <div>
         <span className="section-label">Financial Projections</span>
-        <h2 className="text-display-md font-display font-bold tracking-tight text-ink mb-6">
+        <h2 className="text-display-sm sm:text-display-md font-display font-bold tracking-tight text-ink mb-6">
           Returns, Costs & Timeline
         </h2>
 
         {/* Scenario toggle */}
-        <div className="flex items-center gap-1 mb-10 bg-ink/5 rounded-full p-1 w-fit max-w-full overflow-x-auto">
+        <div className="flex flex-wrap items-center gap-1 mb-10 bg-ink/5 rounded-full p-1 w-fit max-w-full">
           {scenarioOptions.map((option, i) => (
             <button
               key={option.key}
               onClick={() => setActiveIndex(i)}
-              className={`relative px-3 md:px-5 py-2 rounded-full text-body-sm font-medium transition-colors duration-300 whitespace-nowrap ${
+              className={`relative px-3 md:px-5 py-2 rounded-full text-body-sm font-medium transition-colors duration-300 ${
                 activeIndex === i
                   ? "text-white"
                   : "text-ink/50 hover:text-ink/70"
@@ -162,12 +162,14 @@ export default function FinancialsSection({ onNavigate }: FinancialsSectionProps
               </div>
             </div>
 
-            {/* Timeline — horizontal milestone line */}
+            {/* Timeline — horizontal on desktop, vertical on mobile */}
             <div>
               <h4 className="text-heading-md font-display font-semibold text-ink mb-8">
                 Project Timeline
               </h4>
-              <div className="relative overflow-x-auto pb-2">
+
+              {/* Desktop: horizontal milestone line */}
+              <div className="relative hidden sm:block pb-2">
                 {/* Background line */}
                 <div className="absolute top-[7px] left-0 right-0 h-0.5 bg-ink/10" />
                 {/* Animated progress line */}
@@ -179,9 +181,8 @@ export default function FinancialsSection({ onNavigate }: FinancialsSectionProps
                   transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
                   style={{ width: "100%" }}
                 />
-
                 {/* Milestone nodes */}
-                <div className="relative flex justify-between min-w-[600px]">
+                <div className="relative flex justify-between">
                   {financials.timeline.map((item, i) => (
                     <motion.div
                       key={item.phase}
@@ -192,14 +193,45 @@ export default function FinancialsSection({ onNavigate }: FinancialsSectionProps
                       className="flex flex-col items-center text-center"
                       style={{ width: `${100 / financials.timeline.length}%` }}
                     >
-                      {/* Dot */}
                       <div className="w-3.5 h-3.5 rounded-full bg-accent border-[2.5px] border-white shadow-sm flex-shrink-0 z-10" />
-                      {/* Phase */}
-                      <span className="text-caption font-mono font-semibold text-accent mt-3 mb-1 whitespace-nowrap">
+                      <span className="text-caption font-mono font-semibold text-accent mt-3 mb-1">
                         {item.phase}
                       </span>
-                      {/* Description */}
-                      <span className="text-caption text-ink-light leading-snug max-w-[130px]">
+                      <span className="text-caption text-ink-light leading-snug max-w-[140px]">
+                        {item.milestone}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mobile: vertical timeline */}
+              <div className="relative sm:hidden pl-5">
+                {/* Vertical line */}
+                <div className="absolute left-[6px] top-0 bottom-0 w-0.5 bg-ink/10" />
+                <motion.div
+                  className="absolute left-[6px] top-0 w-0.5 bg-accent origin-top"
+                  initial={{ scaleY: 0 }}
+                  whileInView={{ scaleY: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
+                  style={{ height: "100%" }}
+                />
+                <div className="space-y-6">
+                  {financials.timeline.map((item, i) => (
+                    <motion.div
+                      key={item.phase}
+                      initial={{ opacity: 0, x: 10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.4 + i * 0.12, duration: 0.4 }}
+                      className="relative"
+                    >
+                      <div className="absolute -left-5 top-0.5 w-3 h-3 rounded-full bg-accent border-[2px] border-white shadow-sm z-10" />
+                      <span className="block text-caption font-mono font-semibold text-accent mb-0.5">
+                        {item.phase}
+                      </span>
+                      <span className="block text-caption text-ink-light leading-snug">
                         {item.milestone}
                       </span>
                     </motion.div>

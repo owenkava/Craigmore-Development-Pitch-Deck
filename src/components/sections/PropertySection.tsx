@@ -19,7 +19,7 @@ export default function PropertySection({ onNavigate }: PropertySectionProps) {
     <SectionShell id="property" index={2}>
       <div>
         <span className="section-label">The Current Property</span>
-        <h2 className="text-display-md font-display font-bold tracking-tight text-ink mb-2">
+        <h2 className="text-display-sm sm:text-display-md font-display font-bold tracking-tight text-ink mb-2">
           Site Overview
         </h2>
         <p className="text-body-lg text-ink-light max-w-2xl mb-10">

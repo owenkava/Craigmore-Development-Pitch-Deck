@@ -151,7 +151,7 @@ function ChartBlock({
               <div style={{ width: 280, height }} />
             )}
           </div>
-          <div className="flex flex-col gap-2 min-w-[160px]">
+          <div className="flex flex-col gap-2">
             {(data as PieChartData[]).map((entry) => (
               <div key={entry.name} className="flex items-center gap-2">
                 <span

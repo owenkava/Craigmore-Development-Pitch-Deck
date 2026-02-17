@@ -41,7 +41,7 @@ export default function OpportunitySection({ onNavigate }: OpportunitySectionPro
       <div>
         {/* Header */}
         <span className="section-label">The Opportunity</span>
-        <h2 className="text-display-md font-display font-bold tracking-tight text-ink mb-3 max-w-3xl">
+        <h2 className="text-display-sm sm:text-display-md font-display font-bold tracking-tight text-ink mb-3 max-w-3xl">
           {opportunity.headline}
         </h2>
         <p className="text-body-lg text-ink-light max-w-2xl mb-12">
