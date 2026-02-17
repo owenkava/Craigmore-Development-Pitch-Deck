@@ -24,3 +24,7 @@ npm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# source images (too large for GitHub)
+/Images For Pitch Deck/
+MAP.png
