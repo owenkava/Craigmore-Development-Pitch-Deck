@@ -39,37 +39,37 @@ export async function GET() {
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-    // Navigate with fast wait strategy
+    // Navigate — generous timeout for first cold compile
     await page.goto(`${baseUrl}/print`, {
       waitUntil: "domcontentloaded",
-      timeout: 15000,
+      timeout: 45000,
     });
 
     // Wait for the print root to appear
-    await page.waitForSelector("#print-root", { timeout: 8000 });
+    await page.waitForSelector("#print-root", { timeout: 10000 });
 
-    // Wait for fonts to be ready
-    await page.evaluate(() => document.fonts.ready);
-
-    // Wait for all images to load (with 5s cap)
+    // Wait for fonts + images in parallel (3s cap on images)
     await page.evaluate(() => {
-      return Promise.race([
-        Promise.all(
-          Array.from(document.querySelectorAll("img")).map((img) =>
-            img.complete
-              ? Promise.resolve()
-              : new Promise<void>((resolve) => {
-                  img.onload = () => resolve();
-                  img.onerror = () => resolve();
-                })
-          )
-        ),
-        new Promise<void>((resolve) => setTimeout(resolve, 5000)),
+      return Promise.all([
+        document.fonts.ready,
+        Promise.race([
+          Promise.all(
+            Array.from(document.querySelectorAll("img")).map((img) =>
+              img.complete
+                ? Promise.resolve()
+                : new Promise<void>((resolve) => {
+                    img.onload = () => resolve();
+                    img.onerror = () => resolve();
+                  })
+            )
+          ),
+          new Promise<void>((resolve) => setTimeout(resolve, 3000)),
+        ]),
       ]);
     });
 
-    // Small buffer for Recharts to finish rendering
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    // Brief settle for CSS paint
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
     // Count slides
     const slideCount = await page.evaluate(() => {

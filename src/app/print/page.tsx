@@ -15,21 +15,10 @@ import {
   closing,
   closingScenarios,
 } from "@/data/deck";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Line,
-  ComposedChart,
-} from "recharts";
 
 /**
  * Print route: renders each section as a 16:9 landscape slide
- * for PDF export via Puppeteer. 14 slides total.
+ * for PDF export via Puppeteer. NO Recharts — pure HTML/CSS for speed.
  */
 
 const SLIDE_W = 1280;
@@ -167,12 +156,111 @@ function SpecGrid({ specs, dark }: { specs: { label: string; value: string }[]; 
   );
 }
 
+/* ── Pure CSS donut chart (no Recharts) ── */
+function CSSDonut({ data, size = 140 }: { data: { name: string; value: number; color: string }[]; size?: number }) {
+  const total = data.reduce((sum, d) => sum + d.value, 0);
+  let cumulative = 0;
+  const segments = data.map((d) => {
+    const start = (cumulative / total) * 360;
+    cumulative += d.value;
+    const end = (cumulative / total) * 360;
+    return { ...d, start, end, pct: ((d.value / total) * 100).toFixed(0) };
+  });
+
+  // Build conic-gradient stops
+  const stops = segments
+    .map((s) => `${s.color} ${s.start}deg ${s.end}deg`)
+    .join(", ");
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+      <div
+        style={{
+          width: `${size}px`,
+          height: `${size}px`,
+          borderRadius: "50%",
+          background: `conic-gradient(${stops})`,
+          position: "relative",
+          flexShrink: 0,
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: "25%",
+            left: "25%",
+            width: "50%",
+            height: "50%",
+            borderRadius: "50%",
+            background: "white",
+          }}
+        />
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
+        {segments.map((s) => (
+          <div key={s.name} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "10px" }}>
+            <span style={{ width: "8px", height: "8px", borderRadius: "2px", background: s.color, flexShrink: 0 }} />
+            <span style={{ color: BRAND.muted }}>{s.name}</span>
+            <span style={{ color: BRAND.ink, fontWeight: 500 }}>{s.pct}%</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Financial summary card for a scenario ── */
+function FinancialSummaryCard({
+  label,
+  financials,
+  highlight = false,
+}: {
+  label: string;
+  financials: typeof financialsPremiumCondos;
+  highlight?: boolean;
+}) {
+  const s = financials.summary;
+  return (
+    <div style={{
+      background: highlight ? BRAND.surface : "transparent",
+      border: highlight ? "none" : `1px solid ${BRAND.cool}`,
+      borderRadius: "10px",
+      padding: "16px",
+    }}>
+      <h4 style={{ fontSize: "13px", fontWeight: 700, marginBottom: "12px", color: BRAND.ink }}>{label}</h4>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "12px" }}>
+        {[
+          { stat: s.projectedIRR, label: "IRR" },
+          { stat: s.equityMultiple, label: "Multiple" },
+          { stat: s.netProfit, label: "Net Profit" },
+          { stat: s.totalRevenue, label: "Revenue" },
+        ].map((m) => (
+          <div key={m.label}>
+            <span style={{ fontSize: "16px", fontWeight: 700, display: "block", color: BRAND.ink }}>{m.stat}</span>
+            <span style={{ fontSize: "9px", color: BRAND.muted }}>{m.label}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "3px 10px", fontSize: "10px" }}>
+        {[
+          ["Cost", s.totalProjectCost],
+          ["Equity", s.equityRequired],
+          ["Debt", s.debtFinancing],
+          ["Timeline", s.projectTimeline],
+        ].map(([l, v]) => (
+          <div key={l} style={{ display: "contents" }}>
+            <span style={{ color: BRAND.muted }}>{l}</span>
+            <span style={{ fontWeight: 500, textAlign: "right" }}>{v}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════════ */
 
 export default function PrintPage() {
-  /* Alias the primary financials (38 Luxury Condo — best numbers) */
-  const financials = financialsMaxDensity;
-
   return (
     <div id="print-root" style={{ width: `${SLIDE_W}px`, margin: "0 auto" }}>
 
@@ -312,7 +400,6 @@ export default function PrintPage() {
                 ["Lots", property.proposedLots],
                 ["Zoning", property.zoning],
                 ["Servicing", property.servicing],
-                ["Topography", property.topography],
               ] as const).map(([l, v]) => (
                 <div key={l} style={{ display: "contents" }}>
                   <span style={{ color: BRAND.muted }}>{l}</span>
@@ -338,39 +425,8 @@ export default function PrintPage() {
         </div>
       </SlideFrame>
 
-      {/* ═══════════════ SLIDE 5: PROPERTY — GALLERY & AMENITIES ═══════════════ */}
-      <SlideFrame slideNumber={5} sectionLabel="Current Property" bgColor={BRAND.cool}>
-        <SectionTitle>Gallery &amp; Community Amenities</SectionTitle>
-        {/* Gallery strip */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px", marginBottom: "24px" }}>
-          {property.galleryImages.slice(0, 3).map((img) => (
-            <div key={img.src} style={{ borderRadius: "10px", overflow: "hidden", height: "200px", position: "relative" }}>
-              <SlideImage src={img.src} alt={img.caption} />
-              <div style={{
-                position: "absolute", bottom: 0, left: 0, right: 0,
-                background: "linear-gradient(transparent, rgba(0,0,0,0.6))",
-                padding: "8px 12px",
-              }}>
-                <span style={{ fontSize: "9px", color: "white" }}>{img.caption}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Amenities */}
-        <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "12px" }}>Communal Amenities</h4>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-          {property.communalAmenities.map((a) => (
-            <div key={a} style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "11px", color: BRAND.inkLight }}>
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: BRAND.ink, flexShrink: 0 }} />
-              {a}
-            </div>
-          ))}
-        </div>
-      </SlideFrame>
-
-      {/* ═══════════════ SLIDE 6: ZONING & SURROUNDINGS ═══════════════ */}
-      <SlideFrame slideNumber={6} sectionLabel="Zoning & Surroundings">
+      {/* ═══════════════ SLIDE 5: ZONING & SURROUNDINGS ═══════════════ */}
+      <SlideFrame slideNumber={5} sectionLabel="Zoning & Surroundings">
         <SectionTitle sub={zoning.subtitle}>{zoning.headline}</SectionTitle>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px", marginTop: "8px" }}>
           {/* Left: entitlements grid */}
@@ -414,11 +470,10 @@ export default function PrintPage() {
         </div>
       </SlideFrame>
 
-      {/* ═══════════════ SLIDE 7: HOME TYPE — 24 PREMIUM CONDOS ═══════════════ */}
-      <SlideFrame slideNumber={7} sectionLabel="Development Options" dark>
+      {/* ═══════════════ SLIDE 6: HOME TYPE — 24 PREMIUM CONDOS ═══════════════ */}
+      <SlideFrame slideNumber={6} sectionLabel="Development Options" dark>
         <SectionTitle dark sub={premiumCondoUnit.tagline}>{premiumCondoUnit.name}</SectionTitle>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px", marginTop: "8px" }}>
-          {/* Left: image + features */}
           <div>
             <div style={{ borderRadius: "10px", overflow: "hidden", height: "220px", marginBottom: "16px", position: "relative" }}>
               {premiumCondoUnit.exteriorImage ? (
@@ -437,7 +492,6 @@ export default function PrintPage() {
             </ul>
           </div>
 
-          {/* Right: specs + price + buyer */}
           <div>
             <h4 style={{ fontSize: "12px", fontWeight: 600, color: "white", marginBottom: "12px" }}>Specifications</h4>
             <SpecGrid specs={premiumCondoUnit.specs} dark />
@@ -451,8 +505,8 @@ export default function PrintPage() {
         </div>
       </SlideFrame>
 
-      {/* ═══════════════ SLIDE 8: HOME TYPE — 38 LUXURY CONDOS ═══════════════ */}
-      <SlideFrame slideNumber={8} sectionLabel="Development Options" dark>
+      {/* ═══════════════ SLIDE 7: HOME TYPE — 38 LUXURY CONDOS ═══════════════ */}
+      <SlideFrame slideNumber={7} sectionLabel="Development Options" dark>
         <SectionTitle dark sub={maxDensityCondoUnit.tagline}>{maxDensityCondoUnit.name}</SectionTitle>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px", marginTop: "8px" }}>
           <div>
@@ -486,21 +540,14 @@ export default function PrintPage() {
         </div>
       </SlideFrame>
 
-      {/* ═══════════════ SLIDE 9: HOME TYPE — 12 TOWNHOMES ═══════════════ */}
-      <SlideFrame slideNumber={9} sectionLabel="Development Options" bgColor={BRAND.cool}>
+      {/* ═══════════════ SLIDE 8: HOME TYPE — 12 TOWNHOMES ═══════════════ */}
+      <SlideFrame slideNumber={8} sectionLabel="Development Options" bgColor={BRAND.cool}>
         <SectionTitle sub={townhomeUnit.tagline}>{townhomeUnit.name}</SectionTitle>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px", marginTop: "8px" }}>
           <div>
-            <div style={{ display: "grid", gridTemplateColumns: townhomeUnit.floorPlanImage ? "1fr 1fr" : "1fr", gap: "12px", marginBottom: "16px" }}>
-              <div style={{ borderRadius: "10px", overflow: "hidden", height: "200px", position: "relative" }}>
-                {townhomeUnit.exteriorImage ? <SlideImage src={townhomeUnit.exteriorImage} alt="Townhome exterior" /> :
-                  <div style={{ background: "rgba(255,255,255,0.6)", width: "100%", height: "100%" }} />}
-              </div>
-              {townhomeUnit.floorPlanImage && (
-                <div style={{ borderRadius: "10px", overflow: "hidden", height: "200px", position: "relative", background: "rgba(255,255,255,0.4)" }}>
-                  <SlideImage src={townhomeUnit.floorPlanImage} alt="Townhome floor plan" />
-                </div>
-              )}
+            <div style={{ borderRadius: "10px", overflow: "hidden", height: "220px", marginBottom: "16px", position: "relative" }}>
+              {townhomeUnit.exteriorImage ? <SlideImage src={townhomeUnit.exteriorImage} alt="Townhome exterior" /> :
+                <div style={{ background: "rgba(255,255,255,0.6)", width: "100%", height: "100%" }} />}
             </div>
             <h4 style={{ fontSize: "11px", fontWeight: 600, marginBottom: "8px" }}>Key Features</h4>
             <ul style={{ listStyle: "none", padding: 0 }}>
@@ -523,193 +570,11 @@ export default function PrintPage() {
         </div>
       </SlideFrame>
 
-      {/* ═══════════════ SLIDE 10: FINANCIALS — 38 LUXURY CONDO (CHARTS + SENSITIVITY) ═══════════════ */}
-      <SlideFrame slideNumber={10} sectionLabel="Financials">
-        <SectionTitle sub="38-Unit Luxury Condo — Primary Scenario">Financial Projections</SectionTitle>
-
-        {/* Key metrics */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "14px", marginBottom: "20px" }}>
-          {[
-            { stat: financials.summary.projectedIRR, label: "Projected IRR" },
-            { stat: financials.summary.equityMultiple, label: "Equity Multiple" },
-            { stat: financials.summary.netProfit, label: "Net Profit" },
-            { stat: financials.summary.projectTimeline, label: "Timeline" },
-          ].map((m) => (
-            <div key={m.label} style={{ background: BRAND.surface, borderRadius: "10px", padding: "14px" }}>
-              <span style={{ fontSize: "24px", fontWeight: 700, display: "block" }}>{m.stat}</span>
-              <span style={{ fontSize: "10px", color: BRAND.muted }}>{m.label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Charts + Sensitivity */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "24px" }}>
-          {/* Cost Pie */}
-          <div>
-            <h4 style={{ fontSize: "12px", fontWeight: 600, marginBottom: "8px" }}>Cost Distribution</h4>
-            <PieChart width={340} height={220}>
-              <Pie
-                data={financials.chartData.costPie}
-                cx={170} cy={100}
-                innerRadius={50} outerRadius={85}
-                paddingAngle={2} dataKey="value"
-                isAnimationActive={false}
-                label={({ percent }: { percent?: number }) => `${((percent ?? 0) * 100).toFixed(0)}%`}
-                labelLine={false}
-              >
-                {financials.chartData.costPie.map((e, i) => (
-                  <Cell key={i} fill={e.color} stroke="none" />
-                ))}
-              </Pie>
-            </PieChart>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px", marginTop: "2px" }}>
-              {financials.chartData.costPie.map((e) => (
-                <div key={e.name} style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                  <span style={{ width: "8px", height: "8px", borderRadius: "2px", background: e.color, flexShrink: 0 }} />
-                  <span style={{ fontSize: "9px", color: BRAND.muted }}>{e.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Revenue Pie */}
-          <div>
-            <h4 style={{ fontSize: "12px", fontWeight: 600, marginBottom: "8px" }}>Revenue Sources</h4>
-            <PieChart width={340} height={220}>
-              <Pie
-                data={financials.chartData.revenuePie}
-                cx={170} cy={100}
-                innerRadius={50} outerRadius={85}
-                paddingAngle={2} dataKey="value"
-                isAnimationActive={false}
-                label={({ percent }: { percent?: number }) => `${((percent ?? 0) * 100).toFixed(0)}%`}
-                labelLine={false}
-              >
-                {financials.chartData.revenuePie.map((e, i) => (
-                  <Cell key={i} fill={e.color} stroke="none" />
-                ))}
-              </Pie>
-            </PieChart>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px", marginTop: "2px" }}>
-              {financials.chartData.revenuePie.map((e) => (
-                <div key={e.name} style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                  <span style={{ width: "8px", height: "8px", borderRadius: "2px", background: e.color, flexShrink: 0 }} />
-                  <span style={{ fontSize: "9px", color: BRAND.muted }}>{e.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Sensitivity */}
-          <div>
-            <h4 style={{ fontSize: "12px", fontWeight: 600, marginBottom: "8px" }}>Sensitivity Analysis</h4>
-            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse" }}>
-              <thead>
-                <tr style={{ borderBottom: `1px solid ${BRAND.cool}` }}>
-                  <th style={{ textAlign: "left", paddingBottom: "6px", fontSize: "9px", color: BRAND.muted, textTransform: "uppercase", letterSpacing: "0.05em" }}>Scenario</th>
-                  <th style={{ textAlign: "right", paddingBottom: "6px", fontSize: "9px", color: BRAND.muted, textTransform: "uppercase", letterSpacing: "0.05em" }}>IRR</th>
-                  <th style={{ textAlign: "right", paddingBottom: "6px", fontSize: "9px", color: BRAND.muted, textTransform: "uppercase", letterSpacing: "0.05em" }}>Multiple</th>
-                  <th style={{ textAlign: "right", paddingBottom: "6px", fontSize: "9px", color: BRAND.muted, textTransform: "uppercase", letterSpacing: "0.05em" }}>Profit</th>
-                </tr>
-              </thead>
-              <tbody>
-                {financials.sensitivity.map((r) => (
-                  <tr key={r.scenario} style={{
-                    borderBottom: `1px solid ${BRAND.surface}`,
-                    ...(r.scenario === "Base Case" ? { fontWeight: 600, background: BRAND.surface } : {}),
-                  }}>
-                    <td style={{ padding: "7px 0" }}>{r.scenario}</td>
-                    <td style={{ padding: "7px 0", textAlign: "right" }}>{r.irr}</td>
-                    <td style={{ padding: "7px 0", textAlign: "right" }}>{r.multiple}</td>
-                    <td style={{ padding: "7px 0", textAlign: "right" }}>{r.profit}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {/* Timeline compact */}
-            <h4 style={{ fontSize: "12px", fontWeight: 600, marginTop: "20px", marginBottom: "8px" }}>Project Timeline</h4>
-            {financials.timeline.map((t) => (
-              <div key={t.phase} style={{ display: "flex", gap: "8px", fontSize: "10px", marginBottom: "4px" }}>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", color: BRAND.ink, minWidth: "68px", fontWeight: 500 }}>{t.phase}</span>
-                <span style={{ color: BRAND.muted }}>{t.milestone}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </SlideFrame>
-
-      {/* ═══════════════ SLIDE 11: FINANCIAL DETAILS — 38 LUXURY CONDO ═══════════════ */}
-      <SlideFrame slideNumber={11} sectionLabel="Financials">
-        <SectionTitle sub="38-Unit Luxury Condo — Cost &amp; Revenue Detail">Financial Detail</SectionTitle>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px", marginBottom: "20px" }}>
-          {/* Cost Breakdown */}
-          <div>
-            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "10px" }}>Cost Breakdown</h4>
-            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse" }}>
-              <tbody>
-                {financials.costBreakdown.map((row) => (
-                  <tr key={row.label} style={{
-                    borderBottom: `1px solid ${BRAND.surface}`,
-                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
-                  }}>
-                    <td style={{ padding: "5px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
-                    <td style={{ padding: "5px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
-                    <td style={{ padding: "5px 0", textAlign: "right", color: BRAND.muted, width: "50px" }}>{row.values[1]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Revenue Breakdown */}
-          <div>
-            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "10px" }}>Revenue Breakdown</h4>
-            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse" }}>
-              <tbody>
-                {financials.revenueBreakdown.map((row) => (
-                  <tr key={row.label} style={{
-                    borderBottom: `1px solid ${BRAND.surface}`,
-                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
-                  }}>
-                    <td style={{ padding: "5px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
-                    <td style={{ padding: "5px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
-                    <td style={{ padding: "5px 0", textAlign: "right", color: BRAND.muted, width: "50px" }}>{row.values[1]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {/* Revenue scenarios */}
-            <h4 style={{ fontSize: "11px", fontWeight: 600, marginTop: "16px", marginBottom: "8px" }}>Revenue Scenarios</h4>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", fontSize: "10px" }}>
-              {(["worst", "likely", "best"] as const).map((s) => (
-                <div key={s} style={{ background: BRAND.surface, borderRadius: "6px", padding: "8px", textAlign: "center" }}>
-                  <span style={{ display: "block", fontWeight: 600, textTransform: "capitalize", marginBottom: "2px" }}>{s}</span>
-                  <span style={{ color: BRAND.ink, fontWeight: 700 }}>{financials.revenueScenarios[s].total}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Cashflow Chart */}
-        <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "8px" }}>Quarterly Cash Flow ($K)</h4>
-        <ComposedChart width={1100} height={170} data={financials.chartData.cashflow}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e8e8e8" />
-          <XAxis dataKey="quarter" tick={{ fontSize: 10, fill: BRAND.muted }} axisLine={{ stroke: "#e5e5e5" }} />
-          <YAxis tick={{ fontSize: 10, fill: BRAND.muted }} axisLine={{ stroke: "#e5e5e5" }} tickFormatter={(v: number) => `$${v}K`} />
-          <Bar dataKey="inflow" fill={BRAND.ink} name="Inflows" radius={[3, 3, 0, 0]} isAnimationActive={false} />
-          <Bar dataKey="outflow" fill="#d4d4d4" name="Outflows" radius={[3, 3, 0, 0]} isAnimationActive={false} />
-          <Line type="monotone" dataKey="cumulative" stroke={BRAND.inkLight} strokeWidth={2} dot={{ r: 3, fill: BRAND.inkLight }} name="Cumulative" isAnimationActive={false} />
-        </ComposedChart>
-      </SlideFrame>
-
-      {/* ═══════════════ SLIDE 12: SCENARIO COMPARISON ═══════════════ */}
-      <SlideFrame slideNumber={12} sectionLabel="Financials">
+      {/* ═══════════════ SLIDE 9: SCENARIO COMPARISON ═══════════════ */}
+      <SlideFrame slideNumber={9} sectionLabel="Financials">
         <SectionTitle sub="Side-by-side comparison of all three development pathways">Scenario Comparison</SectionTitle>
 
-        <table style={{ width: "100%", fontSize: "12px", borderCollapse: "collapse", marginTop: "16px" }}>
+        <table style={{ width: "100%", fontSize: "12px", borderCollapse: "collapse", marginTop: "12px" }}>
           <thead>
             <tr style={{ borderBottom: `2px solid ${BRAND.ink}` }}>
               <th style={{ textAlign: "left", padding: "10px 12px", fontSize: "10px", color: BRAND.muted, textTransform: "uppercase", letterSpacing: "0.08em" }}>Metric</th>
@@ -726,27 +591,28 @@ export default function PrintPage() {
               { metric: "Equity Required", a: financialsPremiumCondos.summary.equityRequired, b: financialsMaxDensity.summary.equityRequired, c: financialsTownhomes.summary.equityRequired },
               { metric: "Projected IRR", a: financialsPremiumCondos.summary.projectedIRR, b: financialsMaxDensity.summary.projectedIRR, c: financialsTownhomes.summary.projectedIRR, bold: true },
               { metric: "Equity Multiple", a: financialsPremiumCondos.summary.equityMultiple, b: financialsMaxDensity.summary.equityMultiple, c: financialsTownhomes.summary.equityMultiple, bold: true },
+              { metric: "Debt Financing", a: financialsPremiumCondos.summary.debtFinancing, b: financialsMaxDensity.summary.debtFinancing, c: financialsTownhomes.summary.debtFinancing },
               { metric: "Timeline", a: financialsPremiumCondos.summary.projectTimeline, b: financialsMaxDensity.summary.projectTimeline, c: financialsTownhomes.summary.projectTimeline },
             ] as { metric: string; a: string; b: string; c: string; bold?: boolean }[]).map((row) => (
               <tr key={row.metric} style={{ borderBottom: `1px solid ${BRAND.cool}`, ...(row.bold ? { fontWeight: 700 } : {}) }}>
-                <td style={{ padding: "10px 12px", color: BRAND.inkLight }}>{row.metric}</td>
-                <td style={{ padding: "10px 12px", textAlign: "center", fontWeight: row.bold ? 700 : 500 }}>{row.a}</td>
-                <td style={{ padding: "10px 12px", textAlign: "center", fontWeight: row.bold ? 700 : 500, background: BRAND.surface }}>{row.b}</td>
-                <td style={{ padding: "10px 12px", textAlign: "center", fontWeight: row.bold ? 700 : 500 }}>{row.c}</td>
+                <td style={{ padding: "9px 12px", color: BRAND.inkLight }}>{row.metric}</td>
+                <td style={{ padding: "9px 12px", textAlign: "center", fontWeight: row.bold ? 700 : 500 }}>{row.a}</td>
+                <td style={{ padding: "9px 12px", textAlign: "center", fontWeight: row.bold ? 700 : 500, background: BRAND.surface }}>{row.b}</td>
+                <td style={{ padding: "9px 12px", textAlign: "center", fontWeight: row.bold ? 700 : 500 }}>{row.c}</td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        {/* Scenario sensitivity comparison */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px", marginTop: "28px" }}>
+        {/* Sensitivity per scenario */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px", marginTop: "24px" }}>
           {([
             { label: "24 Premium Condos", data: financialsPremiumCondos.sensitivity },
             { label: "38 Luxury Condos", data: financialsMaxDensity.sensitivity, highlight: true },
             { label: "12 Townhomes", data: financialsTownhomes.sensitivity },
           ]).map((scenario) => (
-            <div key={scenario.label} style={{ background: scenario.highlight ? BRAND.surface : "transparent", borderRadius: "8px", padding: "12px" }}>
-              <h4 style={{ fontSize: "11px", fontWeight: 600, marginBottom: "8px" }}>{scenario.label} — Sensitivity</h4>
+            <div key={scenario.label} style={{ background: scenario.highlight ? BRAND.surface : "transparent", borderRadius: "8px", padding: "10px" }}>
+              <h4 style={{ fontSize: "10px", fontWeight: 600, marginBottom: "6px" }}>{scenario.label} — Sensitivity</h4>
               <table style={{ width: "100%", fontSize: "10px", borderCollapse: "collapse" }}>
                 <thead>
                   <tr style={{ borderBottom: `1px solid ${BRAND.cool}` }}>
@@ -758,15 +624,209 @@ export default function PrintPage() {
                 <tbody>
                   {scenario.data.map((r) => (
                     <tr key={r.scenario} style={{ borderBottom: `1px solid ${BRAND.surface}` }}>
-                      <td style={{ padding: "4px 0" }}>{r.scenario}</td>
-                      <td style={{ padding: "4px 0", textAlign: "right" }}>{r.irr}</td>
-                      <td style={{ padding: "4px 0", textAlign: "right" }}>{r.profit}</td>
+                      <td style={{ padding: "3px 0" }}>{r.scenario}</td>
+                      <td style={{ padding: "3px 0", textAlign: "right" }}>{r.irr}</td>
+                      <td style={{ padding: "3px 0", textAlign: "right" }}>{r.profit}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           ))}
+        </div>
+      </SlideFrame>
+
+      {/* ═══════════════ SLIDE 10: FINANCIALS — 24 PREMIUM CONDOS ═══════════════ */}
+      <SlideFrame slideNumber={10} sectionLabel="Financials — 24 Premium Condos">
+        <SectionTitle sub="24 Premium Condos — Cost, Revenue &amp; Timeline">Financial Detail</SectionTitle>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
+          {/* Cost Breakdown */}
+          <div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+              <h4 style={{ fontSize: "13px", fontWeight: 600 }}>Cost Breakdown</h4>
+              <CSSDonut data={financialsPremiumCondos.chartData.costPie} size={100} />
+            </div>
+            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse" }}>
+              <tbody>
+                {financialsPremiumCondos.costBreakdown.map((row) => (
+                  <tr key={row.label} style={{
+                    borderBottom: `1px solid ${BRAND.surface}`,
+                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
+                  }}>
+                    <td style={{ padding: "4px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
+                    <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
+                    <td style={{ padding: "4px 0", textAlign: "right", color: BRAND.muted, width: "40px" }}>{row.values[1]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Revenue + Timeline */}
+          <div>
+            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "10px" }}>Revenue Breakdown</h4>
+            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse", marginBottom: "16px" }}>
+              <tbody>
+                {financialsPremiumCondos.revenueBreakdown.map((row) => (
+                  <tr key={row.label} style={{
+                    borderBottom: `1px solid ${BRAND.surface}`,
+                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
+                  }}>
+                    <td style={{ padding: "4px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
+                    <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
+                    <td style={{ padding: "4px 0", textAlign: "right", color: BRAND.muted, width: "40px" }}>{row.values[1]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "8px" }}>Project Timeline</h4>
+            {financialsPremiumCondos.timeline.map((t) => (
+              <div key={t.phase} style={{ display: "flex", gap: "10px", fontSize: "11px", marginBottom: "5px" }}>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", color: BRAND.ink, minWidth: "75px", fontWeight: 500 }}>{t.phase}</span>
+                <span style={{ color: BRAND.muted }}>{t.milestone}</span>
+              </div>
+            ))}
+
+            {/* Waterfall summary */}
+            {financialsPremiumCondos.waterfall && (
+              <div style={{ marginTop: "14px", background: BRAND.surface, borderRadius: "8px", padding: "12px" }}>
+                <h4 style={{ fontSize: "11px", fontWeight: 600, marginBottom: "6px" }}>Investor Waterfall</h4>
+                <div style={{ fontSize: "10px", display: "grid", gridTemplateColumns: "auto 1fr", gap: "3px 10px" }}>
+                  <span style={{ color: BRAND.muted }}>Pref Return</span>
+                  <span style={{ fontWeight: 500 }}>{financialsPremiumCondos.waterfall.prefReturn}</span>
+                  <span style={{ color: BRAND.muted }}>LP/GP Split</span>
+                  <span style={{ fontWeight: 500 }}>{financialsPremiumCondos.waterfall.lpGpSplit}</span>
+                  <span style={{ color: BRAND.muted }}>Investor Equity</span>
+                  <span style={{ fontWeight: 500 }}>{financialsPremiumCondos.waterfall.investorEquity}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </SlideFrame>
+
+      {/* ═══════════════ SLIDE 11: FINANCIALS — 38 LUXURY CONDOS ═══════════════ */}
+      <SlideFrame slideNumber={11} sectionLabel="Financials — 38 Luxury Condos">
+        <SectionTitle sub="38-Unit Luxury Condo — Cost, Revenue &amp; Timeline">Financial Detail</SectionTitle>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+              <h4 style={{ fontSize: "13px", fontWeight: 600 }}>Cost Breakdown</h4>
+              <CSSDonut data={financialsMaxDensity.chartData.costPie} size={100} />
+            </div>
+            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse" }}>
+              <tbody>
+                {financialsMaxDensity.costBreakdown.map((row) => (
+                  <tr key={row.label} style={{
+                    borderBottom: `1px solid ${BRAND.surface}`,
+                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
+                  }}>
+                    <td style={{ padding: "4px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
+                    <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
+                    <td style={{ padding: "4px 0", textAlign: "right", color: BRAND.muted, width: "40px" }}>{row.values[1]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "10px" }}>Revenue Breakdown</h4>
+            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse", marginBottom: "16px" }}>
+              <tbody>
+                {financialsMaxDensity.revenueBreakdown.map((row) => (
+                  <tr key={row.label} style={{
+                    borderBottom: `1px solid ${BRAND.surface}`,
+                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
+                  }}>
+                    <td style={{ padding: "4px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
+                    <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
+                    <td style={{ padding: "4px 0", textAlign: "right", color: BRAND.muted, width: "40px" }}>{row.values[1]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "8px" }}>Project Timeline</h4>
+            {financialsMaxDensity.timeline.map((t) => (
+              <div key={t.phase} style={{ display: "flex", gap: "10px", fontSize: "11px", marginBottom: "5px" }}>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", color: BRAND.ink, minWidth: "75px", fontWeight: 500 }}>{t.phase}</span>
+                <span style={{ color: BRAND.muted }}>{t.milestone}</span>
+              </div>
+            ))}
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginTop: "14px", fontSize: "10px" }}>
+              {(["worst", "likely", "best"] as const).map((s) => (
+                <div key={s} style={{ background: BRAND.surface, borderRadius: "6px", padding: "8px", textAlign: "center" }}>
+                  <span style={{ display: "block", fontWeight: 600, textTransform: "capitalize", marginBottom: "2px" }}>{s}</span>
+                  <span style={{ color: BRAND.ink, fontWeight: 700 }}>{financialsMaxDensity.revenueScenarios[s].total}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </SlideFrame>
+
+      {/* ═══════════════ SLIDE 12: FINANCIALS — 12 TOWNHOMES ═══════════════ */}
+      <SlideFrame slideNumber={12} sectionLabel="Financials — 12 Townhomes">
+        <SectionTitle sub="12 Townhomes — Cost, Revenue &amp; Timeline">Financial Detail</SectionTitle>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+              <h4 style={{ fontSize: "13px", fontWeight: 600 }}>Cost Breakdown</h4>
+              <CSSDonut data={financialsTownhomes.chartData.costPie} size={100} />
+            </div>
+            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse" }}>
+              <tbody>
+                {financialsTownhomes.costBreakdown.map((row) => (
+                  <tr key={row.label} style={{
+                    borderBottom: `1px solid ${BRAND.surface}`,
+                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
+                  }}>
+                    <td style={{ padding: "4px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
+                    <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
+                    <td style={{ padding: "4px 0", textAlign: "right", color: BRAND.muted, width: "40px" }}>{row.values[1]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "10px" }}>Revenue Breakdown</h4>
+            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse", marginBottom: "16px" }}>
+              <tbody>
+                {financialsTownhomes.revenueBreakdown.map((row) => (
+                  <tr key={row.label} style={{
+                    borderBottom: `1px solid ${BRAND.surface}`,
+                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
+                  }}>
+                    <td style={{ padding: "4px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
+                    <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
+                    <td style={{ padding: "4px 0", textAlign: "right", color: BRAND.muted, width: "40px" }}>{row.values[1]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "8px" }}>Project Timeline</h4>
+            {financialsTownhomes.timeline.map((t) => (
+              <div key={t.phase} style={{ display: "flex", gap: "10px", fontSize: "11px", marginBottom: "5px" }}>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", color: BRAND.ink, minWidth: "75px", fontWeight: 500 }}>{t.phase}</span>
+                <span style={{ color: BRAND.muted }}>{t.milestone}</span>
+              </div>
+            ))}
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginTop: "14px", fontSize: "10px" }}>
+              {(["worst", "likely", "best"] as const).map((s) => (
+                <div key={s} style={{ background: BRAND.surface, borderRadius: "6px", padding: "8px", textAlign: "center" }}>
+                  <span style={{ display: "block", fontWeight: 600, textTransform: "capitalize", marginBottom: "2px" }}>{s}</span>
+                  <span style={{ color: BRAND.ink, fontWeight: 700 }}>{financialsTownhomes.revenueScenarios[s].total}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </SlideFrame>
 
@@ -809,65 +869,47 @@ export default function PrintPage() {
         </div>
       </SlideFrame>
 
-      {/* ═══════════════ SLIDE 14: CLOSING ═══════════════ */}
+      {/* ═══════════════ SLIDE 14: CLOSING — ALL 3 SCENARIOS ═══════════════ */}
       <SlideFrame slideNumber={14} sectionLabel="Closing" dark>
-        <h2 style={{ fontSize: "32px", fontWeight: 700, color: "white", marginBottom: "24px" }}>
+        <h2 style={{ fontSize: "28px", fontWeight: 700, color: "white", marginBottom: "6px" }}>
           Let&apos;s Build Together
         </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "32px" }}>
-          {/* Capital Ask */}
-          <div>
-            <h4 style={{ fontSize: "12px", fontWeight: 600, color: "white", marginBottom: "16px" }}>Capital Ask</h4>
-            <span style={{ fontSize: "36px", fontWeight: 700, color: "white", display: "block", marginBottom: "4px" }}>
-              {closingScenarios[0].capitalAsk}
-            </span>
-            <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", display: "block", marginBottom: "16px" }}>
-              Min. investment: {closingScenarios[0].minimumInvestment}
-            </span>
-            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 12px", fontSize: "11px" }}>
-              <span style={{ color: "rgba(255,255,255,0.45)" }}>Structure</span>
-              <span style={{ color: "rgba(255,255,255,0.8)" }}>{closingScenarios[0].structure}</span>
-              <span style={{ color: "rgba(255,255,255,0.45)" }}>Target Close</span>
-              <span style={{ color: "rgba(255,255,255,0.8)" }}>{closingScenarios[0].targetClose}</span>
-              <span style={{ color: "rgba(255,255,255,0.45)" }}>Equity Offered</span>
-              <span style={{ color: "rgba(255,255,255,0.8)" }}>{closingScenarios[0].equityOffered}</span>
-            </div>
-            <div style={{ marginTop: "12px", padding: "10px", background: "rgba(255,255,255,0.08)", borderRadius: "6px" }}>
-              <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)", lineHeight: 1.5 }}>{closingScenarios[0].investorTerms}</p>
-            </div>
-          </div>
+        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.45)", marginBottom: "20px" }}>
+          Three investment pathways — choose the scenario that fits your appetite
+        </p>
 
-          {/* Use of Funds */}
-          <div>
-            <h4 style={{ fontSize: "12px", fontWeight: 600, color: "white", marginBottom: "16px" }}>Use of Funds</h4>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "6px 12px", fontSize: "11px" }}>
-              {closingScenarios[0].useOfFunds.map((item: { label: string; amount: string; percent: string }) => (
-                <div key={item.label} style={{ display: "contents" }}>
-                  <span style={{ color: "rgba(255,255,255,0.45)" }}>{item.label}</span>
-                  <span style={{ color: "rgba(255,255,255,0.8)", fontWeight: 500, textAlign: "right" }}>{item.amount}</span>
-                  <span style={{ color: "rgba(255,255,255,0.35)", textAlign: "right" }}>{item.percent}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+          {closingScenarios.map((scenario) => (
+            <div key={scenario.key} style={{ background: "rgba(255,255,255,0.06)", borderRadius: "10px", padding: "16px" }}>
+              <h4 style={{ fontSize: "11px", fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                {scenario.label}
+              </h4>
+              <span style={{ fontSize: "24px", fontWeight: 700, color: "white", display: "block", marginBottom: "2px" }}>
+                {scenario.capitalAsk}
+              </span>
+              <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.35)", display: "block", marginBottom: "12px" }}>
+                Min. {scenario.minimumInvestment}
+              </span>
 
-          {/* Key Dates */}
-          <div>
-            <h4 style={{ fontSize: "12px", fontWeight: 600, color: "white", marginBottom: "16px" }}>Key Dates</h4>
-            <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "6px 12px", fontSize: "11px" }}>
-              {closingScenarios[0].timeline.map((item: { date: string; event: string }) => (
-                <div key={item.date + item.event} style={{ display: "contents" }}>
-                  <span style={{ color: "rgba(255,255,255,0.7)", fontFamily: "'JetBrains Mono', monospace", whiteSpace: "nowrap" }}>{item.date}</span>
-                  <span style={{ color: "rgba(255,255,255,0.55)" }}>{item.event}</span>
-                </div>
-              ))}
+              <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "3px 10px", fontSize: "10px", marginBottom: "12px" }}>
+                <span style={{ color: "rgba(255,255,255,0.4)" }}>Structure</span>
+                <span style={{ color: "rgba(255,255,255,0.75)" }}>{scenario.structure}</span>
+                <span style={{ color: "rgba(255,255,255,0.4)" }}>Close</span>
+                <span style={{ color: "rgba(255,255,255,0.75)" }}>{scenario.targetClose}</span>
+                <span style={{ color: "rgba(255,255,255,0.4)" }}>Equity</span>
+                <span style={{ color: "rgba(255,255,255,0.75)" }}>{scenario.equityOffered}</span>
+              </div>
+
+              <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "8px" }}>
+                <p style={{ fontSize: "9px", color: "rgba(255,255,255,0.4)", lineHeight: 1.4 }}>{scenario.investorTerms}</p>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
 
         {/* Contact footer */}
-        <div style={{ position: "absolute", bottom: "48px", left: `${PAD_X}px`, right: `${PAD_X}px` }}>
-          <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "16px" }}>
+        <div style={{ position: "absolute", bottom: "40px", left: `${PAD_X}px`, right: `${PAD_X}px` }}>
+          <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "12px" }}>
             <div>
               <span style={{ fontSize: "13px", fontWeight: 600, color: "white", display: "block" }}>{closing.contact.name}</span>
               <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)" }}>{closing.contact.title}</span>
@@ -877,7 +919,7 @@ export default function PrintPage() {
               <span style={{ display: "block" }}>{closing.contact.phone}</span>
             </div>
           </div>
-          <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.15)", marginTop: "12px" }}>{closing.disclaimer}</p>
+          <p style={{ fontSize: "8px", color: "rgba(255,255,255,0.15)", marginTop: "8px" }}>{closing.disclaimer}</p>
         </div>
       </SlideFrame>
     </div>
