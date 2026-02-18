@@ -72,7 +72,7 @@ export const team: TeamMember[] = [
       "Deep expertise in land acquisition, municipal approvals, and project execution from site selection to delivery",
       "Strong relationships with local contractors, planners, and municipal stakeholders throughout HRM",
     ],
-    image: "",
+    image: "/images/sam-gillett.png",
   },
   {
     name: "Byron Kavanagh",
@@ -83,7 +83,7 @@ export const team: TeamMember[] = [
       "Extensive experience in land acquisition, municipal zoning, permit acquisition, pro forma modelling, and capital structuring",
       "Born and raised in Halifax with deep local market knowledge and long-standing relationships across HRM",
     ],
-    image: "",
+    image: "/images/byron-kavanagh.png",
   },
   {
     name: "Jack Gillett",
@@ -94,7 +94,7 @@ export const team: TeamMember[] = [
       "Experience coordinating trades, consultants, and municipal inspections across multi-unit residential projects",
       "Detail-oriented approach to quality control and cost management throughout the development lifecycle",
     ],
-    image: "",
+    image: "/images/jack-gillett.png",
   },
 ];
 
