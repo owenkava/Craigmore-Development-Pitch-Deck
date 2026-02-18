@@ -145,11 +145,11 @@ function SectionTitle({ children, sub, dark }: { children: React.ReactNode; sub?
 
 function SpecGrid({ specs, dark }: { specs: { label: string; value: string }[]; dark?: boolean }) {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 14px", fontSize: "11px" }}>
+    <div style={{ display: "grid", gridTemplateColumns: "110px 1fr", gap: "4px 12px", fontSize: "11px" }}>
       {specs.map((s) => (
         <div key={s.label} style={{ display: "contents" }}>
-          <span style={{ color: dark ? "rgba(255,255,255,0.45)" : BRAND.muted }}>{s.label}</span>
-          <span style={{ fontWeight: 500, textAlign: "right", color: dark ? "#fff" : BRAND.ink }}>{s.value}</span>
+          <span style={{ color: dark ? "rgba(255,255,255,0.45)" : BRAND.muted, whiteSpace: "nowrap" }}>{s.label}</span>
+          <span style={{ fontWeight: 500, color: dark ? "#fff" : BRAND.ink, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.value}</span>
         </div>
       ))}
     </div>
@@ -157,7 +157,9 @@ function SpecGrid({ specs, dark }: { specs: { label: string; value: string }[]; 
 }
 
 /* ── Pure CSS donut chart (no Recharts) ── */
-function CSSDonut({ data, size = 140 }: { data: { name: string; value: number; color: string }[]; size?: number }) {
+function CSSDonut({ data, size = 140, maxItems = 8 }: { data: { name: string; value: number; color: string }[]; size?: number; maxItems?: number }) {
+  // Limit legend items to prevent overflow
+  data = data.slice(0, maxItems);
   const total = data.reduce((sum, d) => sum + d.value, 0);
   let cumulative = 0;
   const segments = data.map((d) => {
@@ -541,31 +543,33 @@ export default function PrintPage() {
       </SlideFrame>
 
       {/* ═══════════════ SLIDE 8: HOME TYPE — 12 TOWNHOMES ═══════════════ */}
-      <SlideFrame slideNumber={8} sectionLabel="Development Options" bgColor={BRAND.cool}>
-        <SectionTitle sub={townhomeUnit.tagline}>{townhomeUnit.name}</SectionTitle>
+      <SlideFrame slideNumber={8} sectionLabel="Development Options" dark>
+        <SectionTitle dark sub={townhomeUnit.tagline}>{townhomeUnit.name}</SectionTitle>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px", marginTop: "8px" }}>
           <div>
             <div style={{ borderRadius: "10px", overflow: "hidden", height: "220px", marginBottom: "16px", position: "relative" }}>
               {townhomeUnit.exteriorImage ? <SlideImage src={townhomeUnit.exteriorImage} alt="Townhome exterior" /> :
-                <div style={{ background: "rgba(255,255,255,0.6)", width: "100%", height: "100%" }} />}
+                <div style={{ background: "rgba(255,255,255,0.1)", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)" }}>Exterior Render</span>
+                </div>}
             </div>
-            <h4 style={{ fontSize: "11px", fontWeight: 600, marginBottom: "8px" }}>Key Features</h4>
+            <h4 style={{ fontSize: "11px", fontWeight: 600, color: "white", marginBottom: "8px" }}>Key Features</h4>
             <ul style={{ listStyle: "none", padding: 0 }}>
               {townhomeUnit.features.map((f) => (
-                <Bullet key={f}>{f}</Bullet>
+                <Bullet key={f} dark>{f}</Bullet>
               ))}
             </ul>
           </div>
 
           <div>
-            <h4 style={{ fontSize: "12px", fontWeight: 600, marginBottom: "12px" }}>Specifications</h4>
-            <SpecGrid specs={townhomeUnit.specs} />
-            <div style={{ background: "rgba(255,255,255,0.5)", borderRadius: "8px", padding: "14px", marginTop: "20px", marginBottom: "20px" }}>
-              <span style={{ fontSize: "10px", color: BRAND.muted, display: "block" }}>Price Band</span>
-              <span style={{ fontSize: "20px", fontWeight: 700 }}>{townhomeUnit.priceBand}</span>
+            <h4 style={{ fontSize: "12px", fontWeight: 600, color: "white", marginBottom: "12px" }}>Specifications</h4>
+            <SpecGrid specs={townhomeUnit.specs} dark />
+            <div style={{ background: "rgba(255,255,255,0.1)", borderRadius: "8px", padding: "14px", marginTop: "20px", marginBottom: "20px" }}>
+              <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.45)", display: "block" }}>Price Band</span>
+              <span style={{ fontSize: "20px", fontWeight: 700, color: "white" }}>{townhomeUnit.priceBand}</span>
             </div>
-            <h4 style={{ fontSize: "11px", fontWeight: 600, marginBottom: "6px" }}>Target Buyer</h4>
-            <p style={{ fontSize: "10px", color: BRAND.inkLight, lineHeight: 1.5 }}>{townhomeUnit.targetBuyer}</p>
+            <h4 style={{ fontSize: "11px", fontWeight: 600, color: "white", marginBottom: "6px" }}>Target Buyer</h4>
+            <p style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)", lineHeight: 1.5 }}>{townhomeUnit.targetBuyer}</p>
           </div>
         </div>
       </SlideFrame>
@@ -574,13 +578,19 @@ export default function PrintPage() {
       <SlideFrame slideNumber={9} sectionLabel="Financials">
         <SectionTitle sub="Side-by-side comparison of all three development pathways">Scenario Comparison</SectionTitle>
 
-        <table style={{ width: "100%", fontSize: "12px", borderCollapse: "collapse", marginTop: "12px" }}>
+        <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse", marginTop: "10px", tableLayout: "fixed" }}>
+          <colgroup>
+            <col style={{ width: "22%" }} />
+            <col style={{ width: "26%" }} />
+            <col style={{ width: "26%" }} />
+            <col style={{ width: "26%" }} />
+          </colgroup>
           <thead>
             <tr style={{ borderBottom: `2px solid ${BRAND.ink}` }}>
-              <th style={{ textAlign: "left", padding: "10px 12px", fontSize: "10px", color: BRAND.muted, textTransform: "uppercase", letterSpacing: "0.08em" }}>Metric</th>
-              <th style={{ textAlign: "center", padding: "10px 12px", fontSize: "10px", color: BRAND.muted, textTransform: "uppercase", letterSpacing: "0.08em" }}>24 Premium Condos</th>
-              <th style={{ textAlign: "center", padding: "10px 12px", fontSize: "10px", color: BRAND.muted, textTransform: "uppercase", letterSpacing: "0.08em", background: BRAND.surface }}>38 Luxury Condos</th>
-              <th style={{ textAlign: "center", padding: "10px 12px", fontSize: "10px", color: BRAND.muted, textTransform: "uppercase", letterSpacing: "0.08em" }}>12 Townhomes</th>
+              <th style={{ textAlign: "left", padding: "8px 8px", fontSize: "9px", color: BRAND.muted, textTransform: "uppercase", letterSpacing: "0.08em" }}>Metric</th>
+              <th style={{ textAlign: "center", padding: "8px 8px", fontSize: "9px", color: BRAND.muted, textTransform: "uppercase", letterSpacing: "0.08em" }}>24 Premium Condos</th>
+              <th style={{ textAlign: "center", padding: "8px 8px", fontSize: "9px", color: BRAND.muted, textTransform: "uppercase", letterSpacing: "0.08em", background: BRAND.surface }}>38 Luxury Condos</th>
+              <th style={{ textAlign: "center", padding: "8px 8px", fontSize: "9px", color: BRAND.muted, textTransform: "uppercase", letterSpacing: "0.08em" }}>12 Townhomes</th>
             </tr>
           </thead>
           <tbody>
@@ -595,38 +605,43 @@ export default function PrintPage() {
               { metric: "Timeline", a: financialsPremiumCondos.summary.projectTimeline, b: financialsMaxDensity.summary.projectTimeline, c: financialsTownhomes.summary.projectTimeline },
             ] as { metric: string; a: string; b: string; c: string; bold?: boolean }[]).map((row) => (
               <tr key={row.metric} style={{ borderBottom: `1px solid ${BRAND.cool}`, ...(row.bold ? { fontWeight: 700 } : {}) }}>
-                <td style={{ padding: "9px 12px", color: BRAND.inkLight }}>{row.metric}</td>
-                <td style={{ padding: "9px 12px", textAlign: "center", fontWeight: row.bold ? 700 : 500 }}>{row.a}</td>
-                <td style={{ padding: "9px 12px", textAlign: "center", fontWeight: row.bold ? 700 : 500, background: BRAND.surface }}>{row.b}</td>
-                <td style={{ padding: "9px 12px", textAlign: "center", fontWeight: row.bold ? 700 : 500 }}>{row.c}</td>
+                <td style={{ padding: "7px 8px", color: BRAND.inkLight, whiteSpace: "nowrap" }}>{row.metric}</td>
+                <td style={{ padding: "7px 8px", textAlign: "center", fontWeight: row.bold ? 700 : 500, whiteSpace: "nowrap" }}>{row.a}</td>
+                <td style={{ padding: "7px 8px", textAlign: "center", fontWeight: row.bold ? 700 : 500, background: BRAND.surface, whiteSpace: "nowrap" }}>{row.b}</td>
+                <td style={{ padding: "7px 8px", textAlign: "center", fontWeight: row.bold ? 700 : 500, whiteSpace: "nowrap" }}>{row.c}</td>
               </tr>
             ))}
           </tbody>
         </table>
 
         {/* Sensitivity per scenario */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px", marginTop: "24px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px", marginTop: "20px" }}>
           {([
             { label: "24 Premium Condos", data: financialsPremiumCondos.sensitivity },
             { label: "38 Luxury Condos", data: financialsMaxDensity.sensitivity, highlight: true },
             { label: "12 Townhomes", data: financialsTownhomes.sensitivity },
           ]).map((scenario) => (
-            <div key={scenario.label} style={{ background: scenario.highlight ? BRAND.surface : "transparent", borderRadius: "8px", padding: "10px" }}>
-              <h4 style={{ fontSize: "10px", fontWeight: 600, marginBottom: "6px" }}>{scenario.label} — Sensitivity</h4>
-              <table style={{ width: "100%", fontSize: "10px", borderCollapse: "collapse" }}>
+            <div key={scenario.label} style={{ background: scenario.highlight ? BRAND.surface : "transparent", borderRadius: "8px", padding: "8px", overflow: "hidden" }}>
+              <h4 style={{ fontSize: "9px", fontWeight: 600, marginBottom: "4px" }}>{scenario.label} — Sensitivity</h4>
+              <table style={{ width: "100%", fontSize: "9px", borderCollapse: "collapse", tableLayout: "fixed" }}>
+                <colgroup>
+                  <col style={{ width: "52%" }} />
+                  <col style={{ width: "24%" }} />
+                  <col style={{ width: "24%" }} />
+                </colgroup>
                 <thead>
                   <tr style={{ borderBottom: `1px solid ${BRAND.cool}` }}>
-                    <th style={{ textAlign: "left", paddingBottom: "4px", fontSize: "9px", color: BRAND.muted }}>Case</th>
-                    <th style={{ textAlign: "right", paddingBottom: "4px", fontSize: "9px", color: BRAND.muted }}>IRR</th>
-                    <th style={{ textAlign: "right", paddingBottom: "4px", fontSize: "9px", color: BRAND.muted }}>Profit</th>
+                    <th style={{ textAlign: "left", paddingBottom: "3px", fontSize: "8px", color: BRAND.muted }}>Case</th>
+                    <th style={{ textAlign: "right", paddingBottom: "3px", fontSize: "8px", color: BRAND.muted }}>IRR</th>
+                    <th style={{ textAlign: "right", paddingBottom: "3px", fontSize: "8px", color: BRAND.muted }}>Profit</th>
                   </tr>
                 </thead>
                 <tbody>
                   {scenario.data.map((r) => (
                     <tr key={r.scenario} style={{ borderBottom: `1px solid ${BRAND.surface}` }}>
-                      <td style={{ padding: "3px 0" }}>{r.scenario}</td>
-                      <td style={{ padding: "3px 0", textAlign: "right" }}>{r.irr}</td>
-                      <td style={{ padding: "3px 0", textAlign: "right" }}>{r.profit}</td>
+                      <td style={{ padding: "2px 4px 2px 0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.scenario}</td>
+                      <td style={{ padding: "2px 0", textAlign: "right", whiteSpace: "nowrap" }}>{r.irr}</td>
+                      <td style={{ padding: "2px 0", textAlign: "right", whiteSpace: "nowrap" }}>{r.profit}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -636,228 +651,102 @@ export default function PrintPage() {
         </div>
       </SlideFrame>
 
-      {/* ═══════════════ SLIDE 10: FINANCIALS — 24 PREMIUM CONDOS ═══════════════ */}
-      <SlideFrame slideNumber={10} sectionLabel="Financials — 24 Premium Condos">
-        <SectionTitle sub="24 Premium Condos — Cost, Revenue &amp; Timeline">Financial Detail</SectionTitle>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
-          {/* Cost Breakdown */}
-          <div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
-              <h4 style={{ fontSize: "13px", fontWeight: 600 }}>Cost Breakdown</h4>
-              <CSSDonut data={financialsPremiumCondos.chartData.costPie} size={100} />
+      {/* ═══════════════ SLIDES 10-12: FINANCIALS — STANDARDIZED TEMPLATE ═══════════════ */}
+      {([
+        { num: 10, label: "24 Premium Condos", fin: financialsPremiumCondos },
+        { num: 11, label: "38 Luxury Condos", fin: financialsMaxDensity },
+        { num: 12, label: "12 Townhomes", fin: financialsTownhomes },
+      ] as const).map((scenario) => (
+        <SlideFrame key={scenario.num} slideNumber={scenario.num} sectionLabel={`Financials — ${scenario.label}`}>
+          <SectionTitle sub={`${scenario.label} — Cost, Revenue & Timeline`}>Financial Detail</SectionTitle>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
+            {/* LEFT: Cost Breakdown + Donut */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+                <h4 style={{ fontSize: "13px", fontWeight: 600 }}>Cost Breakdown</h4>
+                <CSSDonut data={scenario.fin.chartData.costPie.slice(0, 6)} size={90} />
+              </div>
+              <table style={{ width: "100%", fontSize: "10px", borderCollapse: "collapse" }}>
+                <tbody>
+                  {scenario.fin.costBreakdown.map((row) => (
+                    <tr key={row.label} style={{
+                      borderBottom: `1px solid ${BRAND.surface}`,
+                      ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
+                    }}>
+                      <td style={{ padding: "3px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
+                      <td style={{ padding: "3px 0", textAlign: "right", fontWeight: 500, whiteSpace: "nowrap" }}>{row.values[0]}</td>
+                      <td style={{ padding: "3px 0", textAlign: "right", color: BRAND.muted, width: "36px", whiteSpace: "nowrap" }}>{row.values[1]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse" }}>
-              <tbody>
-                {financialsPremiumCondos.costBreakdown.map((row) => (
-                  <tr key={row.label} style={{
-                    borderBottom: `1px solid ${BRAND.surface}`,
-                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
-                  }}>
-                    <td style={{ padding: "4px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
-                    <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
-                    <td style={{ padding: "4px 0", textAlign: "right", color: BRAND.muted, width: "40px" }}>{row.values[1]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
 
-          {/* Revenue + Timeline */}
-          <div>
-            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "10px" }}>Revenue Breakdown</h4>
-            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse", marginBottom: "16px" }}>
-              <tbody>
-                {financialsPremiumCondos.revenueBreakdown.map((row) => (
-                  <tr key={row.label} style={{
-                    borderBottom: `1px solid ${BRAND.surface}`,
-                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
-                  }}>
-                    <td style={{ padding: "4px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
-                    <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
-                    <td style={{ padding: "4px 0", textAlign: "right", color: BRAND.muted, width: "40px" }}>{row.values[1]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {/* RIGHT: Revenue + Timeline + Revenue Scenarios */}
+            <div>
+              <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "8px" }}>Revenue Breakdown</h4>
+              <table style={{ width: "100%", fontSize: "10px", borderCollapse: "collapse", marginBottom: "14px" }}>
+                <tbody>
+                  {scenario.fin.revenueBreakdown.map((row) => (
+                    <tr key={row.label} style={{
+                      borderBottom: `1px solid ${BRAND.surface}`,
+                      ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
+                    }}>
+                      <td style={{ padding: "3px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight, maxWidth: "200px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{row.label}</td>
+                      <td style={{ padding: "3px 0 3px 8px", textAlign: "right", fontWeight: 500, whiteSpace: "nowrap", fontSize: "9px" }}>{row.values[0]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
-            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "8px" }}>Project Timeline</h4>
-            {financialsPremiumCondos.timeline.map((t) => (
-              <div key={t.phase} style={{ display: "flex", gap: "10px", fontSize: "11px", marginBottom: "5px" }}>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", color: BRAND.ink, minWidth: "75px", fontWeight: 500 }}>{t.phase}</span>
-                <span style={{ color: BRAND.muted }}>{t.milestone}</span>
-              </div>
-            ))}
-
-            {/* Waterfall summary */}
-            {financialsPremiumCondos.waterfall && (
-              <div style={{ marginTop: "14px", background: BRAND.surface, borderRadius: "8px", padding: "12px" }}>
-                <h4 style={{ fontSize: "11px", fontWeight: 600, marginBottom: "6px" }}>Investor Waterfall</h4>
-                <div style={{ fontSize: "10px", display: "grid", gridTemplateColumns: "auto 1fr", gap: "3px 10px" }}>
-                  <span style={{ color: BRAND.muted }}>Pref Return</span>
-                  <span style={{ fontWeight: 500 }}>{financialsPremiumCondos.waterfall.prefReturn}</span>
-                  <span style={{ color: BRAND.muted }}>LP/GP Split</span>
-                  <span style={{ fontWeight: 500 }}>{financialsPremiumCondos.waterfall.lpGpSplit}</span>
-                  <span style={{ color: BRAND.muted }}>Investor Equity</span>
-                  <span style={{ fontWeight: 500 }}>{financialsPremiumCondos.waterfall.investorEquity}</span>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </SlideFrame>
-
-      {/* ═══════════════ SLIDE 11: FINANCIALS — 38 LUXURY CONDOS ═══════════════ */}
-      <SlideFrame slideNumber={11} sectionLabel="Financials — 38 Luxury Condos">
-        <SectionTitle sub="38-Unit Luxury Condo — Cost, Revenue &amp; Timeline">Financial Detail</SectionTitle>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
-              <h4 style={{ fontSize: "13px", fontWeight: 600 }}>Cost Breakdown</h4>
-              <CSSDonut data={financialsMaxDensity.chartData.costPie} size={100} />
-            </div>
-            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse" }}>
-              <tbody>
-                {financialsMaxDensity.costBreakdown.map((row) => (
-                  <tr key={row.label} style={{
-                    borderBottom: `1px solid ${BRAND.surface}`,
-                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
-                  }}>
-                    <td style={{ padding: "4px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
-                    <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
-                    <td style={{ padding: "4px 0", textAlign: "right", color: BRAND.muted, width: "40px" }}>{row.values[1]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div>
-            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "10px" }}>Revenue Breakdown</h4>
-            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse", marginBottom: "16px" }}>
-              <tbody>
-                {financialsMaxDensity.revenueBreakdown.map((row) => (
-                  <tr key={row.label} style={{
-                    borderBottom: `1px solid ${BRAND.surface}`,
-                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
-                  }}>
-                    <td style={{ padding: "4px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
-                    <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
-                    <td style={{ padding: "4px 0", textAlign: "right", color: BRAND.muted, width: "40px" }}>{row.values[1]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "8px" }}>Project Timeline</h4>
-            {financialsMaxDensity.timeline.map((t) => (
-              <div key={t.phase} style={{ display: "flex", gap: "10px", fontSize: "11px", marginBottom: "5px" }}>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", color: BRAND.ink, minWidth: "75px", fontWeight: 500 }}>{t.phase}</span>
-                <span style={{ color: BRAND.muted }}>{t.milestone}</span>
-              </div>
-            ))}
-
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginTop: "14px", fontSize: "10px" }}>
-              {(["worst", "likely", "best"] as const).map((s) => (
-                <div key={s} style={{ background: BRAND.surface, borderRadius: "6px", padding: "8px", textAlign: "center" }}>
-                  <span style={{ display: "block", fontWeight: 600, textTransform: "capitalize", marginBottom: "2px" }}>{s}</span>
-                  <span style={{ color: BRAND.ink, fontWeight: 700 }}>{financialsMaxDensity.revenueScenarios[s].total}</span>
+              <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "6px" }}>Project Timeline</h4>
+              {scenario.fin.timeline.map((t) => (
+                <div key={t.phase} style={{ display: "flex", gap: "10px", fontSize: "10px", marginBottom: "4px" }}>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", color: BRAND.ink, minWidth: "90px", fontWeight: 500 }}>{t.phase}</span>
+                  <span style={{ color: BRAND.muted }}>{t.milestone}</span>
                 </div>
               ))}
-            </div>
-          </div>
-        </div>
-      </SlideFrame>
 
-      {/* ═══════════════ SLIDE 12: FINANCIALS — 12 TOWNHOMES ═══════════════ */}
-      <SlideFrame slideNumber={12} sectionLabel="Financials — 12 Townhomes">
-        <SectionTitle sub="12 Townhomes — Cost, Revenue &amp; Timeline">Financial Detail</SectionTitle>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "32px" }}>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
-              <h4 style={{ fontSize: "13px", fontWeight: 600 }}>Cost Breakdown</h4>
-              <CSSDonut data={financialsTownhomes.chartData.costPie} size={100} />
-            </div>
-            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse" }}>
-              <tbody>
-                {financialsTownhomes.costBreakdown.map((row) => (
-                  <tr key={row.label} style={{
-                    borderBottom: `1px solid ${BRAND.surface}`,
-                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
-                  }}>
-                    <td style={{ padding: "4px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
-                    <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
-                    <td style={{ padding: "4px 0", textAlign: "right", color: BRAND.muted, width: "40px" }}>{row.values[1]}</td>
-                  </tr>
+              {/* Revenue Scenarios — same for all 3 */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginTop: "12px", fontSize: "10px" }}>
+                {(["worst", "likely", "best"] as const).map((s) => (
+                  <div key={s} style={{ background: BRAND.surface, borderRadius: "6px", padding: "8px", textAlign: "center" }}>
+                    <span style={{ display: "block", fontWeight: 600, textTransform: "capitalize", marginBottom: "2px" }}>{s}</span>
+                    <span style={{ color: BRAND.ink, fontWeight: 700 }}>{scenario.fin.revenueScenarios[s].total}</span>
+                  </div>
                 ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div>
-            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "10px" }}>Revenue Breakdown</h4>
-            <table style={{ width: "100%", fontSize: "11px", borderCollapse: "collapse", marginBottom: "16px" }}>
-              <tbody>
-                {financialsTownhomes.revenueBreakdown.map((row) => (
-                  <tr key={row.label} style={{
-                    borderBottom: `1px solid ${BRAND.surface}`,
-                    ...(row.highlight ? { fontWeight: 700, background: BRAND.surface } : {}),
-                  }}>
-                    <td style={{ padding: "4px 0", color: row.highlight ? BRAND.ink : BRAND.inkLight }}>{row.label}</td>
-                    <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 500 }}>{row.values[0]}</td>
-                    <td style={{ padding: "4px 0", textAlign: "right", color: BRAND.muted, width: "40px" }}>{row.values[1]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            <h4 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "8px" }}>Project Timeline</h4>
-            {financialsTownhomes.timeline.map((t) => (
-              <div key={t.phase} style={{ display: "flex", gap: "10px", fontSize: "11px", marginBottom: "5px" }}>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", color: BRAND.ink, minWidth: "75px", fontWeight: 500 }}>{t.phase}</span>
-                <span style={{ color: BRAND.muted }}>{t.milestone}</span>
               </div>
-            ))}
-
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px", marginTop: "14px", fontSize: "10px" }}>
-              {(["worst", "likely", "best"] as const).map((s) => (
-                <div key={s} style={{ background: BRAND.surface, borderRadius: "6px", padding: "8px", textAlign: "center" }}>
-                  <span style={{ display: "block", fontWeight: 600, textTransform: "capitalize", marginBottom: "2px" }}>{s}</span>
-                  <span style={{ color: BRAND.ink, fontWeight: 700 }}>{financialsTownhomes.revenueScenarios[s].total}</span>
-                </div>
-              ))}
             </div>
           </div>
-        </div>
-      </SlideFrame>
+        </SlideFrame>
+      ))}
 
       {/* ═══════════════ SLIDE 13: OUR TEAM ═══════════════ */}
       <SlideFrame slideNumber={13} sectionLabel="Our Team">
         <SectionTitle>Our Team</SectionTitle>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "28px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
           {team.map((m) => (
-            <div key={m.name}>
+            <div key={m.name} style={{ display: "flex", flexDirection: "column" }}>
               <div style={{
-                width: "100%", aspectRatio: "16/10",
+                width: "100%", height: "240px",
                 background: BRAND.cool, borderRadius: "10px",
-                marginBottom: "14px", overflow: "hidden", position: "relative",
-                display: "flex", alignItems: "center", justifyContent: "center",
+                marginBottom: "10px", overflow: "hidden", position: "relative",
               }}>
-                {m.image ? <SlideImage src={m.image} alt={m.name} /> :
-                  <span style={{ fontSize: "11px", color: BRAND.muted }}>Headshot</span>
-                }
+                {m.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={m.image} alt={m.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center", display: "block" }} />
+                ) : (
+                  <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: "11px", color: BRAND.muted }}>Headshot</span>
+                  </div>
+                )}
               </div>
-              <h3 style={{ fontSize: "15px", fontWeight: 600 }}>{m.name}</h3>
-              <p style={{ fontSize: "11px", color: BRAND.inkLight, fontWeight: 500, marginBottom: "8px" }}>{m.role}</p>
-              <p style={{
-                fontSize: "10px", color: BRAND.inkLight, marginBottom: "8px", lineHeight: 1.5,
-                display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
-              }}>
-                {m.bio}
-              </p>
+              <h3 style={{ fontSize: "14px", fontWeight: 600, marginBottom: "2px" }}>{m.name}</h3>
+              <p style={{ fontSize: "10px", color: BRAND.inkLight, fontWeight: 500, marginBottom: "6px" }}>{m.role}</p>
               <ul style={{ listStyle: "none", padding: 0 }}>
                 {m.highlights.slice(0, 2).map((h) => (
                   <li key={h} style={{
-                    fontSize: "10px", color: BRAND.muted, marginBottom: "3px", paddingLeft: "10px", position: "relative",
+                    fontSize: "9px", color: BRAND.muted, marginBottom: "2px", paddingLeft: "8px", position: "relative", lineHeight: 1.4,
                     display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
                   }}>
                     <span style={{ position: "absolute", left: 0 }}>&#8226;</span>{h}

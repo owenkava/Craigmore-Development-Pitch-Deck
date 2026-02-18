@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { Browser } from "puppeteer";
+import type { Browser } from "puppeteer-core";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -7,22 +7,39 @@ export const maxDuration = 60;
 /* ── Browser singleton — reuse across requests ── */
 let browserInstance: Browser | null = null;
 
+const IS_VERCEL = !!process.env.VERCEL;
+
 async function getBrowser(): Promise<Browser> {
   if (browserInstance && browserInstance.connected) {
     return browserInstance;
   }
-  const puppeteer = await import("puppeteer");
-  browserInstance = await puppeteer.default.launch({
-    headless: true,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-gpu",
-      "--font-render-hinting=none",
-      "--disable-web-security",
-    ],
-  });
+
+  if (IS_VERCEL) {
+    // Vercel serverless: use @sparticuz/chromium (lightweight, Lambda-compatible)
+    const chromium = (await import("@sparticuz/chromium")).default;
+    const puppeteerCore = (await import("puppeteer-core")).default;
+
+    browserInstance = await puppeteerCore.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath(),
+      headless: true,
+    });
+  } else {
+    // Local dev: use full puppeteer with bundled Chromium
+    const puppeteer = (await import("puppeteer")).default;
+    browserInstance = await puppeteer.launch({
+      headless: true,
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--font-render-hinting=none",
+        "--disable-web-security",
+      ],
+    }) as unknown as Browser;
+  }
+
   return browserInstance;
 }
 
@@ -37,7 +54,9 @@ export async function GET() {
     // Retina-quality rendering
     await page.setViewport({ width: 1280, height: 720, deviceScaleFactor: 2 });
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
     // Navigate — generous timeout for first cold compile
     await page.goto(`${baseUrl}/print`, {
