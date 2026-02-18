@@ -106,7 +106,7 @@ export const opportunity = {
     composition: "3 development pathways",
     acreage: "22,000+ sq ft (two parcels)",
     timeline: "24–30 months",
-    renderImage: "/images/placeholder-subdivision-render.png",
+    renderImage: "/images/build-at-a-glance.png",
   },
   mapImage: "/images/craigmore-map-site.png",
   locationStats: [
