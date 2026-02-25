@@ -56,7 +56,7 @@ export default function Header({ onNavigate, showGrid }: HeaderProps) {
   const financialsIndex = sections.findIndex((s) => s.id === "financials");
 
   return (
-    <header className="fixed top-0 right-0 left-0 lg:left-[240px] h-14 bg-white/90 backdrop-blur-sm border-b border-ink/5 z-30 flex items-center justify-between px-4 sm:px-6 pl-16 lg:pl-6 no-print">
+    <header className="fixed top-0 right-0 left-0 lg:left-[240px] h-14 bg-white/90 backdrop-blur-sm border-b border-ink/5 z-30 flex items-center justify-between px-4 pl-16 sm:px-6 sm:pl-16 lg:pl-6 no-print">
       <div className="flex items-center gap-4">
         {!showGrid && (
           <>
