@@ -172,6 +172,7 @@ export const property = {
     { src: "/images/craigmore-drone-1.jpg", caption: "Aerial drone view of Craigmore Drive and surrounding neighbourhood" },
     { src: "/images/craigmore-drone-2.jpg", caption: "Drone perspective of the development site and streetscape" },
     { src: "/images/craigmore-map-site.png", caption: "Satellite view with property boundary outlined" },
+    { src: "/images/craigmore-legal-plan.png", caption: "Craigmore Legal Plan" },
   ],
   constraints: [
     "Rock-wall / bedrock exposure along the western perimeter of the westernmost lot — may require blasting or engineered foundation solutions",
