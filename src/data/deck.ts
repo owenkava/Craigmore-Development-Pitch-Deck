@@ -50,8 +50,9 @@ export const sections: Section[] = [
   { id: "zoning", navLabel: "Zoning & Surroundings", title: "Zoning & Surroundings", subtitle: "Entitlements and neighbourhood", tileIcon: "04" },
   { id: "homes", navLabel: "Development Options", title: "Development Options", subtitle: "Three viable pathways", tileIcon: "05" },
   { id: "financials", navLabel: "Financials", title: "Financial Projections", subtitle: "Returns, costs, and timeline", tileIcon: "06" },
-  { id: "team", navLabel: "Our Team", title: "Our Team", subtitle: "Experienced developers and operators", tileIcon: "07" },
-  { id: "closing", navLabel: "Closing", title: "Let's Build Together", subtitle: "Investment details and next steps", tileIcon: "08" },
+  { id: "risks", navLabel: "Risks & Mitigations", title: "Risks & Mitigations", subtitle: "Key risks and how we address them", tileIcon: "07" },
+  { id: "team", navLabel: "Our Team", title: "Our Team", subtitle: "Experienced developers and operators", tileIcon: "08" },
+  { id: "closing", navLabel: "Closing", title: "Let's Build Together", subtitle: "Investment details and next steps", tileIcon: "09" },
 ];
 
 export const cover = {
@@ -127,17 +128,17 @@ export const opportunity = {
     },
     {
       title: "Supply Shortage",
-      description: "HRM added 11,600 residents in 2024 but completed only 3,179 new housing units — a growing deficit now estimated at 17,500–20,000 units.",
-      stat: "17,500",
-      statLabel: "Unit housing deficit in HRM",
-      source: "Helio Urban Development, 2024",
+      description: "HRM added strong construction volume in 2025 (~7,000 starts, up 38% YoY), with 13,000+ units under construction as of late 2025, easing rental pressures. Vacancy rose to ~2.7% (CMHC 2025), yet ownership demand remains solid in amenity-rich corridors like Craigmore due to limited new condo supply in established areas.",
+      stat: "2.7%",
+      statLabel: "Vacancy rate (CMHC 2025)",
+      source: "CMHC Rental Market Report 2025 & Housing Supply Report Spring 2026; Halifax housing starts data (2025 annual ~7,000 units)",
     },
     {
       title: "Strong Growth",
-      description: "Halifax's population grew 4.4% in 2022 and 4.0% in 2023 — among the fastest rates for any major Canadian metro — driven primarily by international migration.",
-      stat: "4.0%",
-      statLabel: "HRM population growth (2023)",
-      source: "Halifax Partnership, 2024",
+      description: "Halifax's population growth slowed in 2025 due to federal immigration policy changes, but established neighbourhoods continue to see resilient demand for ownership product from tenants facing the \"rent trap\" (rising rents pushing toward homeownership).",
+      stat: "Resilient",
+      statLabel: "Ownership demand in established corridors",
+      source: "CMHC Housing Market Outlook 2026; Halifax Partnership 2025 data",
     },
     {
       title: "Product Flexibility",
@@ -148,12 +149,12 @@ export const opportunity = {
     },
   ],
   demandDrivers: [
-    "Population growth driven by immigration and interprovincial migration",
+    "Resilient ownership demand in established corridors despite moderated population growth",
     "R-3 as-of-right zoning eliminates approval risk and accelerates timeline",
     "Three executable paths provide strategic flexibility across market conditions",
-    "Rising rents pushing tenants toward home ownership",
-    "Limited new condo and townhouse supply in established Halifax neighbourhoods",
-    "Strong school districts and community amenities nearby",
+    "Rising rents pushing tenants toward homeownership — the \"rent trap\" effect",
+    "Limited new condo supply in established Halifax neighbourhoods despite rising starts",
+    "Vacancy rising to 2.7% moderates rental but supports ownership conversion demand",
   ],
 };
 
@@ -571,13 +572,13 @@ export const closingScenarios: ClosingScenario[] = [
     label: "24 Premium Condos",
     capitalAsk: "$3,497,978",
     minimumInvestment: "$250,000",
-    targetClose: "Q1 2026",
+    targetClose: "Q2 2026",
     structure: "Limited Partnership (LP/GP)",
-    equityOffered: "60% LP / 40% GP after 8% pref",
+    equityOffered: "60% LP / 40% GP after pref & capital return",
     investorTerms:
-      "8% preferred return (12% total over 18 months). Remaining profit split 60/40 LP/GP. Full capital returned before any profit distributions.",
+      "Preferred return (compounded), then 60/40 LP/GP profit split after pref and capital return. Full capital returned before any profit distributions.",
     useOfFunds: [
-      { label: "Land Acquisition", amount: "$2,000,000", percent: "17%" },
+      { label: "Land Acquisition", amount: "~$2,500,000", percent: "21%" },
       { label: "Construction & Site Work", amount: "$6,500,000", percent: "56%" },
       { label: "GC / Developer Fee", amount: "$999,375", percent: "9%" },
       { label: "Permits & Municipal Fees", amount: "$432,000", percent: "4%" },
@@ -643,6 +644,25 @@ export const closingScenarios: ClosingScenario[] = [
       { date: "Q4 2027", event: "Construction completion" },
       { date: "Q1–Q3 2028", event: "Unit closings & final distributions" },
     ],
+  },
+];
+
+export const risks = [
+  {
+    risk: "Market Softening / Higher Vacancy",
+    mitigation: "Rental conversion option built-in for all units; presale campaign to de-risk; focus on ownership demand in established, amenity-rich corridor (vacancy rise to 2.7% supports tenant-to-owner shift).",
+  },
+  {
+    risk: "Construction Cost Overrun",
+    mitigation: "10% hard contingency budgeted; experienced local team with fixed-price trades where possible.",
+  },
+  {
+    risk: "Interest Rate / Financing Sensitivity",
+    mitigation: "70% LTC assumed; stress-tested financials show 16.2% IRR even in downside (-10% revenue).",
+  },
+  {
+    risk: "Timeline Delays",
+    mitigation: "As-of-right R-3 zoning eliminates rezoning risk; municipal services at property line; 18-month build targeted.",
   },
 ];
 

@@ -53,8 +53,9 @@ export const theme = {
     "#ffffff",     // 3 Zoning & Surroundings - white
     "#023E40",     // 4 Home Types / Dev Options - dark (own bg handling)
     "#f0fafa",     // 5 Financials - warm teal tint
-    "#f0fafa",     // 6 Our Team - warm teal tint
-    "#023E40",     // 7 Closing - dark (brand primary)
+    "#ffffff",     // 6 Risks & Mitigations - white
+    "#f0fafa",     // 7 Our Team - warm teal tint
+    "#023E40",     // 8 Closing - dark (brand primary)
   ] as const,
 
   shadows: {

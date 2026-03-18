@@ -13,6 +13,7 @@ import PropertySection from "@/components/sections/PropertySection";
 import ZoningSurroundingsSection from "@/components/sections/ZoningSurroundingsSection";
 import FinancialsSection from "@/components/sections/FinancialsSection";
 import HomeTypeSection from "@/components/sections/HomeTypeSection";
+import RisksSection from "@/components/sections/RisksSection";
 import ClosingSection from "@/components/sections/ClosingSection";
 import { sections } from "@/data/deck";
 
@@ -240,6 +241,7 @@ export default function Home() {
             <ZoningSurroundingsSection onNavigate={navigateToSection} />
             <HomeTypeSection onNavigate={navigateToSection} />
             <FinancialsSection onNavigate={navigateToSection} />
+            <RisksSection onNavigate={navigateToSection} />
             <TeamSection onNavigate={navigateToSection} />
             <ClosingSection onNavigate={navigateToSection} />
           </div>

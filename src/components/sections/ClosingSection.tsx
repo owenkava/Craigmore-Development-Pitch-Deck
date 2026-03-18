@@ -16,7 +16,7 @@ export default function ClosingSection({ onNavigate }: ClosingSectionProps) {
   const active = closingScenarios[activeIndex];
 
   return (
-    <SectionShell id="closing" index={7} dark>
+    <SectionShell id="closing" index={8} dark>
       <div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -56,11 +56,17 @@ export default function ClosingSection({ onNavigate }: ClosingSectionProps) {
           ))}
         </div>
 
-        <p className="text-body-lg text-white/60 max-w-2xl mb-10">
+        <p className="text-body-lg text-white/60 max-w-2xl mb-4">
           Citra Capital is raising{" "}
           <span className="text-white font-semibold">{active.capitalAsk}</span>{" "}
           in equity to acquire and develop Craigmore Drive —{" "}
-          <span className="text-white/80">{active.label}</span>.
+          <span className="text-white/80">{active.label}</span>{" "}
+          (with flexibility for other pathways).
+        </p>
+        <p className="text-body-sm text-white/40 mb-10">
+          Minimum: <span className="text-white/70">{active.minimumInvestment}</span> (or as negotiated) &nbsp;|&nbsp;
+          Structure: <span className="text-white/70">{active.structure}</span> — preferred return (compounded), then 60/40 LP/GP profit split after pref and capital return &nbsp;|&nbsp;
+          Target Close: <span className="text-white/70">{active.targetClose}</span>
         </p>
 
         {/* ── Scenario Content ── */}
@@ -186,6 +192,13 @@ export default function ClosingSection({ onNavigate }: ClosingSectionProps) {
                 </div>
               </div>
             </div>
+
+            {/* Contact Byron line */}
+            <div className="mt-8 pt-6 border-t border-white/10">
+              <p className="text-body-md text-white/70">
+                Contact <span className="text-white font-semibold">Byron Kavanagh</span> for further discussion.
+              </p>
+            </div>
           </motion.div>
         </AnimatePresence>
 
@@ -229,7 +242,7 @@ export default function ClosingSection({ onNavigate }: ClosingSectionProps) {
 
         {/* Nav with light text overrides */}
         <div className="[&_button]:text-white/40 [&_button:hover]:text-white/70 [&_div]:bg-white/10 [&_.bg-ink]:bg-white">
-          <SectionNav currentIndex={7} onNavigate={onNavigate} />
+          <SectionNav currentIndex={8} onNavigate={onNavigate} />
         </div>
 
         {/* Credit line */}

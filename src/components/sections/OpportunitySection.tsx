@@ -207,6 +207,44 @@ export default function OpportunitySection({ onNavigate }: OpportunitySectionPro
           ))}
         </div>
 
+        {/* Vacancy trend callout */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="bg-white rounded-card p-6 shadow-card mb-12"
+        >
+          <h3 className="text-heading-md font-display font-semibold text-ink mb-4">
+            HRM Vacancy Trend
+          </h3>
+          <div className="flex items-center gap-6 mb-4">
+            {/* Simple visual bar showing vacancy rise */}
+            <div className="flex-1">
+              <div className="flex items-end gap-3 h-24">
+                <div className="flex flex-col items-center flex-1">
+                  <span className="text-display-sm font-display font-bold text-ink mb-1">1.0%</span>
+                  <div className="w-full bg-accent/20 rounded-t" style={{ height: "30%" }} />
+                  <span className="text-caption text-ink-muted mt-1">Historic Low</span>
+                </div>
+                <div className="flex flex-col items-center flex-1">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-ink-muted mb-1"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                  <div className="w-0" />
+                  <span className="text-caption text-ink-muted mt-1">&nbsp;</span>
+                </div>
+                <div className="flex flex-col items-center flex-1">
+                  <span className="text-display-sm font-display font-bold text-accent mb-1">2.7%</span>
+                  <div className="w-full bg-accent rounded-t" style={{ height: "80%" }} />
+                  <span className="text-caption text-ink-muted mt-1">2025 (CMHC)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="text-body-sm text-ink-light italic">
+            Rising vacancy moderates rental but supports ownership conversion demand.
+          </p>
+        </motion.div>
+
         {/* Demand drivers */}
         <div>
           <h3 className="text-heading-lg font-display font-semibold text-ink mb-4">

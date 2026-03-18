@@ -162,6 +162,11 @@ export default function FinancialsSection({ onNavigate }: FinancialsSectionProps
               </div>
             </div>
 
+            {/* Assumptions */}
+            <p className="text-caption text-ink-muted italic mb-12">
+              Assumptions: 70% LTC construction loan; 3.5% sales &amp; marketing; 10% hard contingency; Halifax comps show 1–2BR condos in similar corridors at $500–$900 psf (2025–2026 data).
+            </p>
+
             {/* Timeline — horizontal on desktop, vertical on mobile */}
             <div>
               <h4 className="text-heading-md font-display font-semibold text-ink mb-8">

@@ -42,7 +42,7 @@ function TeamPhoto({ name, src }: { name: string; src?: string }) {
 
 export default function TeamSection({ onNavigate }: TeamSectionProps) {
   return (
-    <SectionShell id="team" index={6}>
+    <SectionShell id="team" index={7}>
       <div>
         <span className="section-label">Our Team</span>
         <h2 className="text-display-sm sm:text-display-md font-display font-bold tracking-tight text-ink mb-2">
@@ -90,7 +90,7 @@ export default function TeamSection({ onNavigate }: TeamSectionProps) {
         </div>
       </div>
 
-      <SectionNav currentIndex={6} onNavigate={onNavigate} />
+      <SectionNav currentIndex={7} onNavigate={onNavigate} />
     </SectionShell>
   );
 }
