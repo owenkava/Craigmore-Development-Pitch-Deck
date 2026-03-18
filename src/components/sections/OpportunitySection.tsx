@@ -218,26 +218,22 @@ export default function OpportunitySection({ onNavigate }: OpportunitySectionPro
           <h3 className="text-heading-md font-display font-semibold text-ink mb-4">
             HRM Vacancy Trend
           </h3>
-          <div className="flex items-center gap-6 mb-4">
-            {/* Simple visual bar showing vacancy rise */}
-            <div className="flex-1">
-              <div className="flex items-end gap-3 h-24">
-                <div className="flex flex-col items-center flex-1">
-                  <span className="text-display-sm font-display font-bold text-ink mb-1">1.0%</span>
-                  <div className="w-full bg-accent/20 rounded-t" style={{ height: "30%" }} />
-                  <span className="text-caption text-ink-muted mt-1">Historic Low</span>
-                </div>
-                <div className="flex flex-col items-center flex-1">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-ink-muted mb-1"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-                  <div className="w-0" />
-                  <span className="text-caption text-ink-muted mt-1">&nbsp;</span>
-                </div>
-                <div className="flex flex-col items-center flex-1">
-                  <span className="text-display-sm font-display font-bold text-accent mb-1">2.7%</span>
-                  <div className="w-full bg-accent rounded-t" style={{ height: "80%" }} />
-                  <span className="text-caption text-ink-muted mt-1">2025 (CMHC)</span>
-                </div>
-              </div>
+          <div className="flex items-end gap-4 sm:gap-8 mb-4" style={{ height: "120px" }}>
+            {/* 1.0% bar */}
+            <div className="flex flex-col items-center" style={{ width: "100px" }}>
+              <span className="text-display-sm font-display font-bold text-ink mb-2">1.0%</span>
+              <div className="w-full rounded-t bg-accent/20" style={{ height: "28px" }} />
+              <span className="text-caption text-ink-muted mt-2">Historic Low</span>
+            </div>
+            {/* Arrow */}
+            <div className="flex items-center pb-8">
+              <svg width="32" height="24" viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-ink-muted"><path d="M4 12h24"/><path d="M20 5l8 7-8 7"/></svg>
+            </div>
+            {/* 2.7% bar */}
+            <div className="flex flex-col items-center" style={{ width: "100px" }}>
+              <span className="text-display-sm font-display font-bold text-accent mb-2">2.7%</span>
+              <div className="w-full rounded-t bg-accent" style={{ height: "72px" }} />
+              <span className="text-caption text-ink-muted mt-2">2025 (CMHC)</span>
             </div>
           </div>
           <p className="text-body-sm text-ink-light italic">
