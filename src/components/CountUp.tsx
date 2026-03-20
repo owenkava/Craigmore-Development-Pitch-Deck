@@ -1,21 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { useInView } from "framer-motion";
 
 /**
  * Parses a formatted stat string and extracts the numeric portion, prefix, and suffix.
- *
- * Examples:
- *   "$5,000,000"  → { prefix: "$", number: 5000000, suffix: "", decimals: 0, formatted: "5,000,000" }
- *   "24.1%"       → { prefix: "",  number: 24.1,    suffix: "%", decimals: 1, formatted: "24.1" }
- *   "1.9x"        → { prefix: "",  number: 1.9,     suffix: "x", decimals: 1, formatted: "1.9" }
- *   "$6.3M"       → { prefix: "$", number: 6.3,     suffix: "M", decimals: 1, formatted: "6.3" }
- *   "12,000"      → { prefix: "",  number: 12000,   suffix: "", decimals: 0, formatted: "12,000" }
- *   "85%+"        → { prefix: "",  number: 85,      suffix: "%+", decimals: 0, formatted: "85" }
- *   "2.4km"       → { prefix: "",  number: 2.4,     suffix: "km", decimals: 1, formatted: "2.4" }
- *   "22%+"        → { prefix: "",  number: 22,      suffix: "%+", decimals: 0, formatted: "22" }
- *   "30-36 months" → null (range, not a single number — display as-is)
  */
 function parseStat(raw: string): {
   prefix: string;
@@ -25,19 +14,13 @@ function parseStat(raw: string): {
   hasCommas: boolean;
 } | null {
   const trimmed = raw.trim();
-
-  // Match: optional prefix ($), number with optional commas and decimals, optional suffix
-  const match = trimmed.match(
-    /^([^0-9]*?)([\d,]+(?:\.\d+)?)\s*(.*)$/
-  );
-
+  const match = trimmed.match(/^([^0-9]*?)([\d,]+(?:\.\d+)?)\s*(.*)$/);
   if (!match) return null;
 
   const prefix = match[1];
   const numStr = match[2];
   const suffix = match[3];
 
-  // Skip if the "number" part contains a dash (range like "30-36")
   if (suffix.includes("-") || numStr.includes("-")) return null;
 
   const hasCommas = numStr.includes(",");
@@ -61,7 +44,6 @@ function formatNumber(
   hasCommas: boolean
 ): string {
   const fixed = value.toFixed(decimals);
-
   if (!hasCommas) return fixed;
 
   const [intPart, decPart] = fixed.split(".");
@@ -82,19 +64,19 @@ interface CountUpProps {
 
 export default function CountUp({
   value,
-  duration = 1800,
+  duration = 2000,
   delay = 0,
   className = "",
 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.5 });
-  const [displayValue, setDisplayValue] = useState(value);
   const hasAnimated = useRef(false);
+  const rafId = useRef<number>(0);
 
   const parsed = parseStat(value);
 
   const animate = useCallback(() => {
-    if (!parsed || hasAnimated.current) return;
+    if (!parsed || hasAnimated.current || !ref.current) return;
     hasAnimated.current = true;
 
     const { prefix, number: target, suffix, decimals, hasCommas } = parsed;
@@ -104,33 +86,45 @@ export default function CountUp({
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
 
-      // Ease-out cubic for a satisfying deceleration
-      const eased = 1 - Math.pow(1 - progress, 3);
+      // Quintic ease-out — very smooth deceleration, less jitter than cubic
+      const eased = 1 - Math.pow(1 - progress, 5);
 
       const current = eased * target;
       const formatted = formatNumber(current, decimals, hasCommas);
-      setDisplayValue(`${prefix}${formatted}${suffix}`);
+
+      // Direct DOM update — no React re-render per frame
+      if (ref.current) {
+        ref.current.textContent = `${prefix}${formatted}${suffix}`;
+      }
 
       if (progress < 1) {
-        requestAnimationFrame(step);
+        rafId.current = requestAnimationFrame(step);
       } else {
         // Ensure we land on the exact original value
-        setDisplayValue(value);
+        if (ref.current) {
+          ref.current.textContent = value;
+        }
       }
     };
 
-    requestAnimationFrame(step);
+    rafId.current = requestAnimationFrame(step);
   }, [parsed, duration, value]);
 
   useEffect(() => {
     if (isInView && parsed && !hasAnimated.current) {
       if (delay > 0) {
         const timer = setTimeout(animate, delay);
-        return () => clearTimeout(timer);
+        return () => {
+          clearTimeout(timer);
+          if (rafId.current) cancelAnimationFrame(rafId.current);
+        };
       } else {
         animate();
       }
     }
+    return () => {
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+    };
   }, [isInView, parsed, delay, animate]);
 
   // If unparseable (e.g. a range like "30-36 months"), just show the raw value
@@ -140,7 +134,7 @@ export default function CountUp({
 
   return (
     <span ref={ref} className={className}>
-      {isInView ? displayValue : `${parsed.prefix}0${parsed.suffix}`}
+      {`${parsed.prefix}0${parsed.suffix}`}
     </span>
   );
 }

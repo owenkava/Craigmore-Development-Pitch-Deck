@@ -53,7 +53,7 @@ export default function TeamSection({ onNavigate }: TeamSectionProps) {
           and construction management excellence.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-0 md:grid-rows-[auto_auto_1fr_auto]">
           {team.map((member, i) => (
             <motion.div
               key={member.name}
@@ -61,20 +61,20 @@ export default function TeamSection({ onNavigate }: TeamSectionProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="flex flex-col gap-4 h-full"
+              className="grid grid-rows-subgrid row-span-4 gap-4 pb-8 md:pb-0"
             >
               <TeamPhoto name={member.name} src={member.image} />
 
-              <div className="flex-shrink-0">
+              <div>
                 <h3 className="text-heading-lg font-display font-semibold text-ink">
                   {member.name}
                 </h3>
                 <p className="text-body-sm text-accent font-medium">{member.role}</p>
               </div>
 
-              <p className="text-body-sm text-ink-light flex-grow">{member.bio}</p>
+              <p className="text-body-sm text-ink-light self-start">{member.bio}</p>
 
-              <ul className="space-y-1.5 flex-shrink-0">
+              <ul className="space-y-1.5 self-start">
                 {member.highlights.map((h) => (
                   <li
                     key={h}

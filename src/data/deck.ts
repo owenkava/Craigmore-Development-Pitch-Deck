@@ -60,10 +60,21 @@ export const cover = {
   tagline: "A Citra Capital Development",
   date: "February 2026",
   location: "Halifax, Nova Scotia",
-  backgroundImage: "/images/craigmore-drone-1.jpg",
+  backgroundImage: "/images/craigmore-aerial-wide.jpg",
 };
 
 export const team: TeamMember[] = [
+  {
+    name: "Byron Kavanagh",
+    role: "Chief Investment Officer · Realtor, Red Door Realty",
+    bio: "5+ years immersed in real estate investment and development across Nova Scotia. Co-founder and Chief Investment Officer of Citra Capital, leading acquisition, financing, and execution of residential projects province-wide. Licensed Realtor with Red Door Realty.",
+    highlights: [
+      "Licensed Realtor with Red Door Realty — deep transactional and market expertise across HRM",
+      "Extensive experience in land acquisition, municipal zoning, permit acquisition, pro forma modelling, and capital structuring",
+      "Born and raised in Halifax with deep local market knowledge and long-standing relationships across HRM",
+    ],
+    image: "/images/byron-kavanagh.png",
+  },
   {
     name: "Sam Gillett",
     role: "Managing Partner",
@@ -74,17 +85,6 @@ export const team: TeamMember[] = [
       "Strong relationships with local contractors, planners, and municipal stakeholders throughout HRM",
     ],
     image: "/images/sam-gillett.png",
-  },
-  {
-    name: "Byron Kavanagh",
-    role: "Chief Investment Officer",
-    bio: "5+ years immersed in real estate investment and development across Nova Scotia. Co-founder and Chief Investment Officer of Citra Capital, leading acquisition, financing, and execution of residential projects province-wide.",
-    highlights: [
-      "Chief Investment Officer, Citra Capital — developing, owning, and managing properties across Nova Scotia",
-      "Extensive experience in land acquisition, municipal zoning, permit acquisition, pro forma modelling, and capital structuring",
-      "Born and raised in Halifax with deep local market knowledge and long-standing relationships across HRM",
-    ],
-    image: "/images/byron-kavanagh.png",
   },
   {
     name: "Jack Gillett",
@@ -170,8 +170,9 @@ export const property = {
   sitePlanImage: "/images/site-plan.jpg",
   locationImage: "/images/craigmore-map-site.png",
   galleryImages: [
-    { src: "/images/craigmore-drone-1.jpg", caption: "Aerial drone view of Craigmore Drive and surrounding neighbourhood" },
-    { src: "/images/craigmore-drone-2.jpg", caption: "Drone perspective of the development site and streetscape" },
+    { src: "/images/craigmore-aerial-wide.jpg", caption: "Aerial drone view of Craigmore Drive and surrounding neighbourhood" },
+    { src: "/images/craigmore-aerial-waterfront.jpg", caption: "Drone perspective of the development site and waterfront" },
+    { src: "/images/rotary-aerial.jpeg", caption: "Top-down aerial showing property boundaries" },
     { src: "/images/craigmore-map-site.png", caption: "Satellite view with property boundary outlined" },
     { src: "/images/craigmore-legal-plan.png", caption: "Craigmore Legal Plan" },
   ],
@@ -276,7 +277,7 @@ export const maxDensityCondoUnit: HomeType = {
     { label: "Common Areas", value: "8,066 sq ft" },
   ],
   floorPlanImage: "",
-  exteriorImage: "/images/38-unit-craigmore-render.jpeg",
+  exteriorImage: "/images/luxury-condo-render.png",
   targetBuyer: "Downsizers, professionals, and empty nesters seeking premium 2-bed+den units in Halifax's luxury residential segment with high-end amenities and underground parking.",
   priceBand: "$1,195,000 – $1,895,000",
   features: [
@@ -668,10 +669,10 @@ export const risks = [
 
 export const closing = {
   contact: {
-    name: "Sam Gillett",
-    title: "Managing Partner, Citra Capital",
-    email: "sam@citracapital.ca",
-    phone: "(902) 555-0100",
+    name: "Byron Kavanagh",
+    title: "Chief Investment Officer, Citra Capital · Realtor, Red Door Realty",
+    email: "byron.kavanagh@citracapital.com",
+    phone: "(902) 293-4693",
     address: "Halifax, NS",
   },
   disclaimer:

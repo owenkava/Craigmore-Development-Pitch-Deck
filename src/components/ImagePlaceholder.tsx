@@ -7,6 +7,7 @@ interface ImagePlaceholderProps {
   aspect?: string;
   src?: string;
   className?: string;
+  objectPosition?: string;
 }
 
 export default function ImagePlaceholder({
@@ -14,6 +15,7 @@ export default function ImagePlaceholder({
   aspect = "16/9",
   src,
   className = "",
+  objectPosition,
 }: ImagePlaceholderProps) {
   const [loaded, setLoaded] = useState(false);
   const [errored, setErrored] = useState(false);
@@ -33,6 +35,7 @@ export default function ImagePlaceholder({
           loading="lazy"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover"
+          style={objectPosition ? { objectPosition } : undefined}
           onLoad={() => setLoaded(true)}
           onError={() => setErrored(true)}
         />

@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     locale: "en_CA",
     images: [
       {
-        url: "/images/craigmore-drone-1.jpg",
+        url: "/images/craigmore-aerial-wide.jpg",
         width: 1200,
         height: 630,
         alt: "Craigmore Drive development site — Halifax, Nova Scotia",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     title: "Craigmore Drive — Investor Deck",
     description:
       "Upzoned residential development investment in Halifax, Nova Scotia.",
-    images: ["/images/craigmore-drone-1.jpg"],
+    images: ["/images/craigmore-aerial-wide.jpg"],
   },
   icons: {
     icon: [

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import SectionShell from "@/components/SectionShell";
 import SectionNav from "@/components/SectionNav";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
@@ -34,8 +33,6 @@ const icons: Record<string, React.ReactNode> = {
 };
 
 export default function OpportunitySection({ onNavigate }: OpportunitySectionProps) {
-  const [mapHover, setMapHover] = useState(false);
-
   return (
     <SectionShell id="opportunity" index={1}>
       <div>
@@ -95,82 +92,26 @@ export default function OpportunitySection({ onNavigate }: OpportunitySectionPro
           </motion.div>
         </div>
 
-        {/* ── Map + Location Stats ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-14">
-          {/* Map with property glow + hotspot tooltip */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="lg:col-span-3 relative rounded-card overflow-hidden shadow-card"
-            onMouseLeave={() => setMapHover(false)}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={opportunity.mapImage}
-              alt="Map of Halifax showing Craigmore Drive location"
-              className="w-full h-full object-cover"
-              style={{ aspectRatio: "3/4" }}
-            />
-            {/* Subtle blue glow around the blue square property outline */}
-            <div
-              className="absolute pointer-events-none"
-              style={{
-                top: "38%",
-                left: "38%",
-                width: "11%",
-                height: "6%",
-                transform: "translate(-50%, -50%)",
-                boxShadow: "0 0 20px 8px rgba(59,130,246,0.3), 0 0 40px 16px rgba(59,130,246,0.12)",
-                borderRadius: "3px",
-                border: "1.5px solid rgba(59,130,246,0.35)",
-                animation: "pulse-glow 3s ease-in-out infinite",
-              }}
-            />
-            {/* Clickable hotspot — over the blue square */}
-            <div
-              className="absolute cursor-pointer z-10"
-              style={{ top: "34%", left: "32%", width: "14%", height: "10%" }}
-              onMouseEnter={() => setMapHover(true)}
-              onClick={() => setMapHover((prev) => !prev)}
-            />
-            {/* "Craigmore Drive" popup — appears on hover/click */}
+        {/* ── Location Stats ── */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-14">
+          {opportunity.locationStats.map((stat, i) => (
             <motion.div
-              className="absolute z-20 pointer-events-none"
-              style={{ top: "27%", left: "31%", transformOrigin: "bottom center" }}
-              initial={false}
-              animate={{ opacity: mapHover ? 1 : 0, y: mapHover ? 0 : 6, scale: mapHover ? 1 : 0.95 }}
-              transition={{ duration: 0.2 }}
+              key={stat.label}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.06 }}
+              className="flex items-start gap-3 bg-white rounded-card p-4 shadow-card hover:shadow-card-hover transition-shadow"
             >
-              <div className="bg-white/95 backdrop-blur-sm rounded-lg px-4 py-3 shadow-lg border border-ink/5 pointer-events-auto">
-                <span className="text-body-sm font-display font-semibold text-ink block">Craigmore Drive</span>
-                <span className="text-caption text-ink-muted block">R-3 zoning — 38 units as-of-right</span>
+              <div className="w-9 h-9 rounded-full bg-surface-cool flex items-center justify-center flex-shrink-0 text-accent">
+                {icons[stat.icon] || icons.downtown}
+              </div>
+              <div>
+                <span className="text-body-sm font-medium text-ink">{stat.label}</span>
+                <span className="block text-caption text-ink-muted">{stat.detail}</span>
               </div>
             </motion.div>
-          </motion.div>
-
-          {/* Location stats grid */}
-          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
-            {opportunity.locationStats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, x: 8 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.06 }}
-                className="flex items-start gap-3 bg-white rounded-card p-4 shadow-card hover:shadow-card-hover transition-shadow"
-              >
-                <div className="w-9 h-9 rounded-full bg-surface-cool flex items-center justify-center flex-shrink-0 text-accent">
-                  {icons[stat.icon] || icons.downtown}
-                </div>
-                <div>
-                  <span className="text-body-sm font-medium text-ink">{stat.label}</span>
-                  <span className="block text-caption text-ink-muted">{stat.detail}</span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          ))}
         </div>
 
         {/* ── Investment thesis cards ── */}
@@ -215,28 +156,28 @@ export default function OpportunitySection({ onNavigate }: OpportunitySectionPro
           transition={{ duration: 0.5 }}
           className="bg-white rounded-card p-6 shadow-card mb-12"
         >
-          <h3 className="text-heading-md font-display font-semibold text-ink mb-4">
+          <h3 className="text-heading-md font-display font-semibold text-ink mb-6">
             HRM Vacancy Trend
           </h3>
-          <div className="flex items-end gap-4 sm:gap-8 mb-4" style={{ height: "120px" }}>
+          <div className="flex items-end justify-center gap-2 sm:gap-10 md:gap-16 mb-6 mx-auto max-w-md" style={{ height: "140px" }}>
             {/* 1.0% bar */}
-            <div className="flex flex-col items-center" style={{ width: "100px" }}>
-              <span className="text-display-sm font-display font-bold text-ink mb-2">1.0%</span>
-              <div className="w-full rounded-t bg-accent/20" style={{ height: "28px" }} />
-              <span className="text-caption text-ink-muted mt-2">Historic Low</span>
+            <div className="flex flex-col items-center flex-1">
+              <span className="text-heading-sm sm:text-display-sm font-display font-bold text-ink mb-2">1.0%</span>
+              <div className="w-full rounded-t bg-accent/20" style={{ height: "32px" }} />
+              <span className="text-caption text-ink-muted mt-2 whitespace-nowrap">Historic Low</span>
             </div>
             {/* Arrow */}
-            <div className="flex items-center pb-8">
-              <svg width="32" height="24" viewBox="0 0 32 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-ink-muted"><path d="M4 12h24"/><path d="M20 5l8 7-8 7"/></svg>
+            <div className="flex items-center pb-8 flex-shrink-0 px-1">
+              <svg className="w-5 h-4 sm:w-10 sm:h-6 text-ink-muted" viewBox="0 0 40 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12h32"/><path d="M28 5l8 7-8 7"/></svg>
             </div>
             {/* 2.7% bar */}
-            <div className="flex flex-col items-center" style={{ width: "100px" }}>
-              <span className="text-display-sm font-display font-bold text-accent mb-2">2.7%</span>
-              <div className="w-full rounded-t bg-accent" style={{ height: "72px" }} />
-              <span className="text-caption text-ink-muted mt-2">2025 (CMHC)</span>
+            <div className="flex flex-col items-center flex-1">
+              <span className="text-heading-sm sm:text-display-sm font-display font-bold text-accent mb-2">2.7%</span>
+              <div className="w-full rounded-t bg-accent" style={{ height: "84px" }} />
+              <span className="text-caption text-ink-muted mt-2 whitespace-nowrap">2025 (CMHC)</span>
             </div>
           </div>
-          <p className="text-body-sm text-ink-light italic">
+          <p className="text-body-sm text-ink-light italic text-center">
             Rising vacancy moderates rental but supports ownership conversion demand.
           </p>
         </motion.div>

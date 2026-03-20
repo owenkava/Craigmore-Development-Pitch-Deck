@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { FinancialRow } from "@/data/deck";
 import CountUp from "@/components/CountUp";
+import type { FinancialRow } from "@/data/deck";
 
 interface FinancialTableProps {
   title: string;
@@ -23,7 +23,7 @@ export default function FinancialTable({ title, headers, rows }: FinancialTableP
         {title}
       </h4>
       <div className="overflow-x-auto">
-        <table className="w-full text-left">
+        <table className="w-full text-left" style={{ tableLayout: "fixed" }}>
           <thead>
             <tr className="border-b-2 border-ink/10">
               {headers.map((h) => (
@@ -50,18 +50,19 @@ export default function FinancialTable({ title, headers, rows }: FinancialTableP
                     : ""
                 }`}
               >
-                <td className="py-3 pr-4 text-body-sm text-ink">{row.label}</td>
+                <td className="py-3 pr-4 text-body-sm text-ink whitespace-nowrap overflow-hidden text-ellipsis">{row.label}</td>
                 {row.values.map((v, vi) => (
                   <td
                     key={vi}
-                    className={`py-3 text-body-sm text-right ${
+                    className={`py-3 text-body-sm text-right whitespace-nowrap ${
                       vi === 0 ? "font-medium text-ink pr-4" : "text-ink-muted"
                     }`}
+                    style={{ fontVariantNumeric: "tabular-nums" }}
                   >
                     <CountUp
                       value={String(v)}
-                      duration={1400}
-                      delay={i * 80 + vi * 100}
+                      duration={1600}
+                      delay={i * 80 + 400}
                     />
                   </td>
                 ))}

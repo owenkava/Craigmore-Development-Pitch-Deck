@@ -34,13 +34,13 @@ export default function ZoningSurroundingsSection({ onNavigate }: ZoningSurround
             <h3 className="text-heading-md font-display font-semibold text-ink mb-4">
               Zoning Entitlements
             </h3>
-            <div className="space-y-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-3">
               {zoning.entitlements.map((item) => (
-                <div key={item.label} className="flex justify-between items-baseline gap-4">
-                  <span className="text-body-sm text-ink-muted flex-shrink-0">
+                <div key={item.label}>
+                  <span className="text-caption font-mono text-ink-muted uppercase tracking-wide block">
                     {item.label}
                   </span>
-                  <span className="text-body-sm text-ink text-right font-medium">
+                  <span className="text-body-sm text-ink font-medium mt-0.5 block">
                     {item.value}
                   </span>
                 </div>
@@ -83,14 +83,14 @@ export default function ZoningSurroundingsSection({ onNavigate }: ZoningSurround
             <div
               className="absolute pointer-events-none"
               style={{
-                top: "38%",
-                left: "38%",
-                width: "11%",
-                height: "6%",
-                transform: "translate(-50%, -50%)",
-                boxShadow: "0 0 20px 8px rgba(59,130,246,0.3), 0 0 40px 16px rgba(59,130,246,0.12)",
-                borderRadius: "3px",
-                border: "1.5px solid rgba(59,130,246,0.35)",
+                top: "50.5%",
+                left: "37%",
+                width: "9%",
+                height: "5%",
+                transform: "rotate(5deg)",
+                boxShadow: "0 0 16px 6px rgba(59,130,246,0.35), 0 0 32px 12px rgba(59,130,246,0.15)",
+                borderRadius: "2px",
+                border: "1.5px solid rgba(59,130,246,0.4)",
                 animation: "pulse-glow 3s ease-in-out infinite",
               }}
             />

@@ -192,13 +192,6 @@ export default function ClosingSection({ onNavigate }: ClosingSectionProps) {
                 </div>
               </div>
             </div>
-
-            {/* Contact Byron line */}
-            <div className="mt-8 pt-6 border-t border-white/10">
-              <p className="text-body-md text-white/70">
-                Contact <span className="text-white font-semibold">Byron Kavanagh</span> for further discussion.
-              </p>
-            </div>
           </motion.div>
         </AnimatePresence>
 

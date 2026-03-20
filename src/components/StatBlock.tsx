@@ -33,8 +33,8 @@ export default function StatBlock({
       >
         <CountUp
           value={stat}
-          duration={1800}
-          delay={index * 100 + 200}
+          duration={2000}
+          delay={index * 120 + 600}
         />
       </span>
       <span

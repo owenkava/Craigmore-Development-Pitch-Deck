@@ -39,6 +39,7 @@ export default function HomeCard({ home, dark = false }: HomeCardProps) {
             label="Exterior Render"
             aspect={home.floorPlanImage ? "16/10" : "21/9"}
             src={home.exteriorImage}
+            objectPosition={!home.floorPlanImage ? "center 65%" : undefined}
           />
         </motion.div>
         {home.floorPlanImage && (
