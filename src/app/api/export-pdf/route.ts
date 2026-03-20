@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import type { Browser } from "puppeteer-core";
 
 export const dynamic = "force-dynamic";
@@ -43,7 +43,7 @@ async function getBrowser(): Promise<Browser> {
   return browserInstance;
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const t0 = Date.now();
   let page: Awaited<ReturnType<Browser["newPage"]>> | null = null;
 
@@ -54,9 +54,12 @@ export async function GET() {
     // Retina-quality rendering
     await page.setViewport({ width: 1280, height: 720, deviceScaleFactor: 2 });
 
+    // Derive base URL from the incoming request so it works on any port
+    const host = request.headers.get("host") || "localhost:3000";
+    const protocol = request.headers.get("x-forwarded-proto") || (host.startsWith("localhost") ? "http" : "https");
     const baseUrl =
       process.env.NEXT_PUBLIC_BASE_URL ||
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : `${protocol}://${host}`);
 
     // Navigate — generous timeout for first cold compile
     await page.goto(`${baseUrl}/print`, {

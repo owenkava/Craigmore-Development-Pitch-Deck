@@ -43,12 +43,14 @@ function SlideFrame({
   sectionLabel,
   dark = false,
   bgColor,
+  isLast = false,
 }: {
   children: React.ReactNode;
   slideNumber: number;
   sectionLabel: string;
   dark?: boolean;
   bgColor?: string;
+  isLast?: boolean;
 }) {
   const bg = bgColor || (dark ? BRAND.ink : BRAND.white);
   const textColor = dark ? BRAND.white : BRAND.ink;
@@ -64,7 +66,7 @@ function SlideFrame({
         height: `${SLIDE_H}px`,
         padding: `${PAD_Y}px ${PAD_X}px`,
         position: "relative",
-        pageBreakAfter: "always",
+        pageBreakAfter: isLast ? "auto" : "always",
         pageBreakInside: "avoid",
         overflow: "hidden",
         boxSizing: "border-box",
@@ -728,13 +730,13 @@ export default function PrintPage() {
           {team.map((m) => (
             <div key={m.name} style={{ display: "flex", flexDirection: "column" }}>
               <div style={{
-                width: "100%", height: "240px",
+                width: "100%", height: "280px",
                 background: BRAND.cool, borderRadius: "10px",
                 marginBottom: "10px", overflow: "hidden", position: "relative",
               }}>
                 {m.image ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={m.image} alt={m.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center", display: "block" }} />
+                  <img src={m.image} alt={m.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 15%", display: "block" }} />
                 ) : (
                   <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <span style={{ fontSize: "11px", color: BRAND.muted }}>Headshot</span>
@@ -759,7 +761,7 @@ export default function PrintPage() {
       </SlideFrame>
 
       {/* ═══════════════ SLIDE 14: CLOSING — ALL 3 SCENARIOS ═══════════════ */}
-      <SlideFrame slideNumber={14} sectionLabel="Closing" dark>
+      <SlideFrame slideNumber={14} sectionLabel="Closing" dark isLast>
         <h2 style={{ fontSize: "28px", fontWeight: 700, color: "white", marginBottom: "6px" }}>
           Let&apos;s Build Together
         </h2>
